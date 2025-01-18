@@ -1,6 +1,6 @@
 {
   "name": "@extension/new-tab",
-  "version": "0.3.5",
+  "version": "0.0.1",
   "description": "chrome extension - new tab",
   "private": true,
   "sideEffects": true,
@@ -9,8 +9,8 @@
     "clean:node_modules": "pnpx rimraf node_modules",
     "clean:turbo": "rimraf .turbo",
     "clean": "pnpm clean:turbo && pnpm clean:node_modules",
-    "build": "vite build",
-    "dev": "cross-env __DEV__=true vite build --mode development",
+    "delete:build": "vite build",
+    "delete:dev": "cross-env __DEV__=true vite build --mode development",
     "lint": "biome format",
     "lint:fix": "biome format --write",
     "type-check": "tsc --noEmit"

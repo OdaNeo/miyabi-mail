@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
 import App from '@src/App';
-// @ts-ignore
 import injectedStyle from '@src/index.css?inline';
 
 export function mount() {
