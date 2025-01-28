@@ -1,16 +1,37 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
-import { exampleThemeStorage } from '@extension/storage';
-import { useState, type ChangeEvent } from 'react';
+import { apiKeyStorage, mainIdeaStorage, inputTextStorage, replyStorage } from '@extension/storage';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import OpenAI from 'openai';
 import { rolePrompt } from './utils/tts';
+import { useStorage } from '@extension/shared';
+import { Reply } from './component/Reply';
 
 const isDev = import.meta.env.MODE === 'development';
 
 const Popup = () => {
-  const [apiKey, setApiKey] = useState(isDev ? import.meta.env.VITE_OPENAI_API_KEY : '');
-  const [inputText, setInputText] = useState('');
-  const [reply, setReply] = useState('');
+  const apiKeyFromStorage = useStorage(apiKeyStorage);
+  const mainIdeaFromStorage = useStorage(mainIdeaStorage);
+  const inputTextFromStorage = useStorage(inputTextStorage);
+  const replyFromStorage = useStorage(replyStorage);
+
+  const [apiKey, setApiKey] = useState(apiKeyFromStorage);
+  const [mainIdea, setMainIdea] = useState(mainIdeaFromStorage);
+  const [inputText, setInputText] = useState(inputTextFromStorage);
+  const [reply, setReply] = useState(replyFromStorage);
+
+  useEffect(() => {
+    if (!apiKeyFromStorage) {
+      setApiKey(isDev ? import.meta.env.VITE_OPENAI_API_KEY : '');
+    }
+  }, []);
+
+  useEffect(() => {
+    apiKeyStorage.set(apiKey);
+    mainIdeaStorage.set(mainIdea);
+    inputTextStorage.set(inputText);
+    replyStorage.set(reply);
+  }, [apiKey, mainIdea, inputText, reply]);
 
   const handleReply = async () => {
     if (!apiKey || !inputText) return;
@@ -18,11 +39,10 @@ const Popup = () => {
     const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
     const chatCompletion = await client.chat.completions.create({
-      messages: [{ role: 'user', content: rolePrompt(inputText) }],
-      model: 'text-embedding-3-large',
+      messages: [{ role: 'user', content: rolePrompt(inputText.trim(), mainIdea.trim()) }],
+      model: 'gpt-4o-mini',
       temperature: 0.7,
     });
-    console.log(chatCompletion);
 
     setReply(chatCompletion.choices[0]?.message?.content || '');
   };
@@ -30,31 +50,41 @@ const Popup = () => {
   const handleSetApiKey = (e: ChangeEvent<HTMLInputElement>) => {
     setApiKey(e.target.value);
   };
+  const handleSetMainIdea = (e: ChangeEvent<HTMLInputElement>) => {
+    setMainIdea(e.target.value);
+  };
   const handleInputTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
   };
 
   return (
     <div className="p-4 w-full max-w-md mx-auto space-y-4">
-      <h1 className="text-xl font-bold">OpenAI 日文邮件回复</h1>
+      <h1 className="text-xl font-bold">雅返信</h1>
       <input
-        type="text"
+        type="password"
         className="w-full border rounded p-2"
         placeholder="输入你的OpenAI API Key"
         value={apiKey}
         onChange={handleSetApiKey}
       />
+      <input
+        type="text"
+        className="w-full border rounded p-2"
+        placeholder="输入你的邮件主旨(可选)"
+        value={mainIdea}
+        onChange={handleSetMainIdea}
+      />
       <textarea
         className="w-full border rounded p-2"
         placeholder="在此输入日文邮件"
-        rows={5}
+        rows={10}
         value={inputText}
         onChange={handleInputTextChange}
       />
       <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleReply}>
         生成回复
       </button>
-      {reply && <div className="mt-4 border p-2 rounded text-sm whitespace-pre-wrap">{reply}</div>}
+      {reply && <Reply replyOrigin={reply} />}
     </div>
   );
 };

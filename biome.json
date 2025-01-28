@@ -100,7 +100,7 @@
         "noUnusedLabels": "error",
         "noUnusedVariables": "error",
         "useArrayLiterals": "off",
-        "useExhaustiveDependencies": "warn",
+        "useExhaustiveDependencies": "off",
         "useHookAtTopLevel": "error",
         "useIsNan": "error",
         "useJsxKeyInIterable": "error",
@@ -163,6 +163,6 @@
       "attributePosition": "auto",
       "bracketSpacing": true
     },
-    "globals": ["chrome"]
+    "globals": ["chrome", "WebdriverIO", "browser", "expect", "$", "describe", "it"]
   }
 }
