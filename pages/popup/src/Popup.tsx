@@ -37,6 +37,8 @@ const Popup = () => {
   const [isGenerated, setIsGenerated] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [isError, setIsError] = useState(false);
+
   const [expandedSection, setExpandedSection] = useState<PROMPT | null>(null);
 
   useEffect(() => {
@@ -58,13 +60,13 @@ const Popup = () => {
     if (isLoading) {
       const timer = setInterval(() => {
         setProgress(oldProgress => {
-          const newProgress = Math.min(oldProgress + 10, 100);
-          if (newProgress === 100) {
+          const newProgress = Math.min(oldProgress + 1, 95);
+          if (newProgress === 95) {
             clearInterval(timer);
           }
           return newProgress;
         });
-      }, 800);
+      }, 80);
       return () => clearInterval(timer);
     }
     return;
@@ -86,22 +88,28 @@ const Popup = () => {
     }
     setIsGenerated(false);
     setIsLoading(true);
+    setIsError(false);
     setProgress(0);
+    try {
+      const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
-    const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
+      const chatCompletion = await client.chat.completions.create({
+        messages: [{ role: 'user', content: rolePrompt(inputText.trim(), subject.trim()) }],
+        model: 'gpt-4o-mini',
+        temperature: 0.7,
+      });
 
-    const chatCompletion = await client.chat.completions.create({
-      messages: [{ role: 'user', content: rolePrompt(inputText.trim(), subject.trim()) }],
-      model: 'gpt-4o-mini',
-      temperature: 0.7,
-    });
-
-    setReply(chatCompletion.choices[0]?.message?.content || '');
-
-    setIsGenerated(true);
-    setIsLoading(false);
-    setExpandedSection(PROMPT.JAPANESE_REPLY);
-    setProgress(100);
+      setReply(chatCompletion.choices[0]?.message?.content || '');
+      setIsGenerated(true);
+      setIsLoading(false);
+      setExpandedSection(PROMPT.JAPANESE_REPLY);
+      setProgress(100);
+    } catch (e) {
+      console.error(e);
+      setIsError(true);
+      setIsLoading(false);
+      setProgress(0);
+    }
   };
 
   const handleSetApiKey = (e: ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +120,7 @@ const Popup = () => {
   };
   const handleInputTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
+    setIsError(false);
   };
   const handleInputTextClear = () => {
     setInputText('');
@@ -150,6 +159,13 @@ const Popup = () => {
         setIsOpen={setIsOpen}
       />
 
+      {isError && (
+        <div className="text-red-500 flex items-center text-xs">
+          <AlertTriangle className="h-3 w-3 mr-1" />
+          サーバーエラーが発生しました。しばらくしてから再試行してください。
+        </div>
+      )}
+
       <div className="flex-grow flex flex-col space-y-2 overflow-hidden">
         <div className="relative flex-grow">
           <Textarea
@@ -158,7 +174,7 @@ const Popup = () => {
             disabled={isLoading}
             onChange={handleInputTextChange}
             onPaste={handleOnPaste}
-            className="h-full pr-8 resize-none text-xs scrollbar-custom 
+            className="h-full resize-none text-xs scrollbar-custom 
             dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
             bg-white text-slate-900 placeholder-slate-500"
           />
@@ -187,7 +203,7 @@ const Popup = () => {
         {!isEmailContent && inputText && (
           <div className="flex items-center text-xs dark:text-amber-400 text-amber-500">
             <AlertTriangle className="h-3 w-3 mr-1" />
-            これはメールの内容ではない可能性があります。正しいテキストを貼り付けたか確認してください。
+            これはメールの内容ではない可能性があります。
           </div>
         )}
 

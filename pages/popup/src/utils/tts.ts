@@ -12,7 +12,7 @@ export const rolePrompt = (content: string, main_idea?: string) => {
   ` +
     (main_idea ? `邮件的主要内容在简体中文中的意思是：\n\n${main_idea}\n\n` : '') +
     `
-  请务必严格按照下面格式回复邮件：\n\n
+  请务必严格按照下面格式回复邮件，格式文字不许擅自翻译成日文：\n\n
   ${PROMPT.TRANSLATION}\n\n
   ${PROMPT.JAPANESE_REPLY}\n\n
   ${PROMPT.REPLY_TRANSLATION}
