@@ -1,41 +1,41 @@
 export enum PROMPT {
-  ORIGIN = '原邮件逐字逐句翻译成简体中文的意思是：',
-  REPLY = '你用日文的回复是：',
-  RESULT = '你回复的日文邮件在简体中文的意思是：',
+  TRANSLATION = '原邮件逐字逐句翻译成简体中文的意思是：',
+  JAPANESE_REPLY = '你用日文的回复是：',
+  REPLY_TRANSLATION = '你回复的日文邮件在简体中文的意思是：',
 }
 
 export const rolePrompt = (content: string, main_idea?: string) => {
   return (
     `
-  你是一个日语语言专家，你的任务是回复日语邮件，邮件内容如下：\n\n
+  你是一个日语语言专家，你的任务是回复日语邮件，除了邮件的部分，其他要用简体中文回复我，邮件内容如下：\n\n
   ${content}\n\n
   ` +
     (main_idea ? `邮件的主要内容在简体中文中的意思是：\n\n${main_idea}\n\n` : '') +
     `
   请务必严格按照下面格式回复邮件：\n\n
-  ${PROMPT.ORIGIN}\n\n
-  ${PROMPT.REPLY}\n\n
-  ${PROMPT.RESULT}
+  ${PROMPT.TRANSLATION}\n\n
+  ${PROMPT.JAPANESE_REPLY}\n\n
+  ${PROMPT.REPLY_TRANSLATION}
   `
   );
 };
 
 export function splitByPrompts(text: string): {
-  origin: string;
-  reply: string;
-  result: string;
+  translation: string;
+  japaneseReply: string;
+  replyTranslation: string;
 } {
-  const originStart = text.indexOf(PROMPT.ORIGIN);
-  const replyStart = text.indexOf(PROMPT.REPLY);
-  const resultStart = text.indexOf(PROMPT.RESULT);
+  const translationStart = text.indexOf(PROMPT.TRANSLATION);
+  const japaneseReplyStart = text.indexOf(PROMPT.JAPANESE_REPLY);
+  const replyTranslationStart = text.indexOf(PROMPT.REPLY_TRANSLATION);
 
-  if (originStart === -1 || replyStart === -1 || resultStart === -1) {
-    return { origin: '', reply: '', result: '' };
+  if (translationStart === -1 || japaneseReplyStart === -1 || replyTranslationStart === -1) {
+    return { translation: '', japaneseReply: '', replyTranslation: '' };
   }
 
-  const origin = text.substring(originStart + PROMPT.ORIGIN.length, replyStart).trim();
-  const reply = text.substring(replyStart + PROMPT.REPLY.length, resultStart).trim();
-  const result = text.substring(resultStart + PROMPT.RESULT.length).trim();
+  const translation = text.substring(translationStart + PROMPT.TRANSLATION.length, japaneseReplyStart).trim();
+  const japaneseReply = text.substring(japaneseReplyStart + PROMPT.JAPANESE_REPLY.length, replyTranslationStart).trim();
+  const replyTranslation = text.substring(replyTranslationStart + PROMPT.REPLY_TRANSLATION.length).trim();
 
-  return { origin, reply, result };
+  return { translation, japaneseReply, replyTranslation };
 }
