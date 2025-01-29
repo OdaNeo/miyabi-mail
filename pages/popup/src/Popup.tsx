@@ -1,13 +1,12 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
-import { apiKeyStorage, inputTextStorage, replyStorage } from '@extension/storage';
+import { apiKeyStorage, darkModeStorage, inputTextStorage, replyStorage } from '@extension/storage';
 import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import OpenAI from 'openai';
 import { PROMPT, rolePrompt } from './utils/tts';
 import { useStorage } from '@extension/shared';
 import { Reply } from '@src/components/Reply';
 import { Button } from '@src/components/ui/button';
-import { cn } from '@src/lib/utils';
 import { Header } from '@src/components/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertTriangle } from 'lucide-react';
@@ -24,13 +23,13 @@ const Popup = () => {
   const apiKeyFromStorage = useStorage(apiKeyStorage);
   const inputTextFromStorage = useStorage(inputTextStorage);
   const replyFromStorage = useStorage(replyStorage);
+  const darkMode = useStorage(darkModeStorage);
 
   const [apiKey, setApiKey] = useState(apiKeyFromStorage);
   const [subject, setSubject] = useState('');
   const [inputText, setInputText] = useState(inputTextFromStorage);
   const [reply, setReply] = useState(replyFromStorage);
 
-  const [darkMode, setDarkMode] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEmailContent, setIsEmailContent] = useState(true);
   const [autoSubject, setAutoSubject] = useState(true);
@@ -48,8 +47,13 @@ const Popup = () => {
       setIsGenerated(true);
       setExpandedSection(PROMPT.JAPANESE_REPLY);
     }
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
-  console.log(progress);
+
   useEffect(() => {
     if (isLoading) {
       const timer = setInterval(() => {
@@ -118,7 +122,8 @@ const Popup = () => {
     setExpandedSection(null);
   };
   const handleToggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+    darkModeStorage.set(!darkMode);
   };
   const handleOnPaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
     const text = e.clipboardData.getData('text/plain');
@@ -133,10 +138,8 @@ const Popup = () => {
 
   return (
     <div
-      className={cn(
-        'w-[300px] h-[400px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300',
-        darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black',
-      )}
+      className="w-[300px] h-[450px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
+    dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
     >
       <Header
         darkMode={darkMode}
@@ -155,7 +158,9 @@ const Popup = () => {
             disabled={isLoading}
             onChange={handleInputTextChange}
             onPaste={handleOnPaste}
-            className="h-full pr-8 resize-none text-xs scrollbar-custom"
+            className="h-full pr-8 resize-none text-xs scrollbar-custom 
+            dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
+            bg-white text-slate-900 placeholder-slate-500"
           />
           <AnimatePresence>
             {inputText && (
@@ -180,7 +185,7 @@ const Popup = () => {
         </div>
 
         {!isEmailContent && inputText && (
-          <div className="text-yellow-500 flex items-center text-xs">
+          <div className="flex items-center text-xs dark:text-amber-400 text-amber-500">
             <AlertTriangle className="h-3 w-3 mr-1" />
             これはメールの内容ではない可能性があります。正しいテキストを貼り付けたか確認してください。
           </div>
@@ -201,10 +206,16 @@ const Popup = () => {
           <Button
             onClick={handleReply}
             disabled={isLoading || !inputText.trim()}
-            className="relative overflow-hidden h-7 text-xs bg-green-500 text-white hover:bg-green-600"
+            className="relative overflow-hidden h-7 text-xs text-white 
+            dark:bg-emerald-600 dark:hover:bg-emerald-700 bg-emerald-500  hover:bg-emerald-600"
           >
             {isLoading ? <span>生成中...</span> : <span>返信を生成</span>}
-            {isLoading && <Progress value={progress} className="absolute bottom-0 left-0 right-0 h-1" />}
+            {isLoading && (
+              <Progress
+                value={progress}
+                className="absolute bottom-0 left-0 right-0 h-1 dark:bg-emerald-800 bg-emerald-300"
+              />
+            )}
           </Button>
         </div>
 
@@ -213,7 +224,8 @@ const Popup = () => {
             placeholder="メールの件名を入力してください"
             value={subject}
             onChange={handleSetSubject}
-            className="text-xs"
+            className="text-xs dark:bg-slate-800 
+            dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500"
           />
         )}
 
