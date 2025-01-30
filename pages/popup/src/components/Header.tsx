@@ -1,30 +1,62 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@src/components/ui/tooltip';
 import { Button } from '@src/components/ui/button';
-import { Settings, Sun, Moon, AlertTriangle } from 'lucide-react';
+import { Settings, Sun, Moon, AlertTriangle, EyeOff, Eye, Copy, Trash2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/popover';
-import type { ChangeEvent } from 'react';
+import { useRef, useState } from 'react';
 import { Input } from '@src/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useStorage } from '@extension/shared';
+import { apiVersionStorage } from '@extension/storage';
+import type React from 'react';
 
 export function Header({
   darkMode,
   apiKey,
   isOpen,
   handleToggleDarkMode,
-  handleSetApiKey,
+  setApiKey,
   setIsOpen,
 }: {
   darkMode: boolean;
   apiKey: string;
   isOpen: boolean;
   handleToggleDarkMode: () => void;
-  handleSetApiKey: (e: ChangeEvent<HTMLInputElement>) => void;
+  setApiKey: (apiKey: string) => void;
   setIsOpen: (isOpen: boolean) => void;
 }) {
+  const [showKey, setShowKey] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const apiVersion = useStorage(apiVersionStorage);
+
   const handleClosePopover = () => {
     setIsOpen(false);
   };
   const handleTogglePopover = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const clipboardData = e.clipboardData;
+    if (clipboardData) {
+      const pastedData = clipboardData.getData('text');
+      setApiKey(pastedData);
+    }
+  };
+
+  const handleInputClick = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  };
+
+  const handleCopyKey = () => {
+    navigator.clipboard.writeText(apiKey);
+  };
+
+  const handleDelete = () => {
+    setApiKey('');
   };
 
   return (
@@ -68,20 +100,63 @@ export function Header({
                   APIキーを設定してください。
                 </div>
               )}
-              <Input
-                type="password"
-                placeholder="OpenAI API Key"
-                value={apiKey}
-                onChange={handleSetApiKey}
-                className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400"
-              />
-              <Button
-                disabled={!apiKey}
-                className="w-full bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
-                onClick={handleClosePopover}
-              >
-                保存
-              </Button>
+              <div className="relative">
+                <Input
+                  ref={inputRef}
+                  type={showKey ? 'text' : 'password'}
+                  placeholder="OpenAI API Key"
+                  value={apiKey}
+                  readOnly
+                  onPaste={handlePaste}
+                  onClick={handleInputClick}
+                  className="pr-20 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer"
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-slate-500 hover:text-slate-900"
+                    onClick={() => setShowKey(!showKey)}
+                  >
+                    {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                  {apiKey && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-slate-500 hover:text-slate-900"
+                      onClick={handleCopyKey}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <Select value={apiVersion} onValueChange={apiVersionStorage.set}>
+                <SelectTrigger className="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                  <SelectValue placeholder="Select API Version" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="gpt-4o-mini">GPT-4o-mini</SelectItem>
+                  <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+                  <SelectItem value="o1-mini">GPT-o1-mini</SelectItem>
+                  <SelectItem value="o1">GPT-o1</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="flex gap-2">
+                <Button
+                  disabled={!apiKey}
+                  className="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
+                  onClick={handleClosePopover}
+                >
+                  保存
+                </Button>
+                {apiKey && (
+                  <Button variant="destructive" size="icon" onClick={handleDelete}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </div>
           </PopoverContent>
         </Popover>

@@ -1,6 +1,6 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
-import { apiKeyStorage, darkModeStorage, inputTextStorage, replyStorage } from '@extension/storage';
+import { apiKeyStorage, apiVersionStorage, darkModeStorage, inputTextStorage, replyStorage } from '@extension/storage';
 import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import OpenAI from 'openai';
 import { PROMPT, rolePrompt } from './utils/tts';
@@ -24,6 +24,7 @@ const Popup = () => {
   const inputTextFromStorage = useStorage(inputTextStorage);
   const replyFromStorage = useStorage(replyStorage);
   const darkMode = useStorage(darkModeStorage);
+  const apiVersion = useStorage(apiVersionStorage);
 
   const [apiKey, setApiKey] = useState(apiKeyFromStorage);
   const [subject, setSubject] = useState('');
@@ -95,7 +96,7 @@ const Popup = () => {
 
       const chatCompletion = await client.chat.completions.create({
         messages: [{ role: 'user', content: rolePrompt(inputText.trim(), subject.trim()) }],
-        model: 'gpt-4o-mini',
+        model: apiVersion,
         temperature: 0.7,
       });
 
@@ -112,9 +113,6 @@ const Popup = () => {
     }
   };
 
-  const handleSetApiKey = (e: ChangeEvent<HTMLInputElement>) => {
-    setApiKey(e.target.value);
-  };
   const handleSetSubject = (e: ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value);
   };
@@ -155,7 +153,7 @@ const Popup = () => {
         apiKey={apiKey}
         isOpen={isOpen}
         handleToggleDarkMode={handleToggleDarkMode}
-        handleSetApiKey={handleSetApiKey}
+        setApiKey={setApiKey}
         setIsOpen={setIsOpen}
       />
 
@@ -215,7 +213,7 @@ const Popup = () => {
               checked={autoSubject}
               onCheckedChange={handleSetAutoSubject}
             />
-            <Label htmlFor="auto-subject" className="text-xs">
+            <Label htmlFor="auto-subject" className="text-xs cursor-pointer">
               件名を自動生成
             </Label>
           </div>
