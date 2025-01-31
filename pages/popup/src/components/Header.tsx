@@ -6,29 +6,29 @@ import { useRef, useState } from 'react';
 import { Input } from '@src/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useStorage } from '@extension/shared';
-import { apiVersionStorage } from '@extension/storage';
+import { apiKeyStorage, apiVersionStorage, darkModeStorage } from '@extension/storage';
 import type React from 'react';
 
 export function Header({
-  darkMode,
-  apiKey,
   isOpen,
-  handleToggleDarkMode,
-  setApiKey,
   setIsOpen,
 }: {
-  darkMode: boolean;
-  apiKey: string;
   isOpen: boolean;
-  handleToggleDarkMode: () => void;
-  setApiKey: (apiKey: string) => void;
   setIsOpen: (isOpen: boolean) => void;
 }) {
+  const darkMode = useStorage(darkModeStorage);
+  const apiKey = useStorage(apiKeyStorage);
+
   const [showKey, setShowKey] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const apiVersion = useStorage(apiVersionStorage);
+
+  const handleToggleDarkMode = () => {
+    document.documentElement.classList.toggle('dark');
+    darkModeStorage.set(!darkMode);
+  };
 
   const handleClosePopover = () => {
     setIsOpen(false);
@@ -41,7 +41,7 @@ export function Header({
     const clipboardData = e.clipboardData;
     if (clipboardData) {
       const pastedData = clipboardData.getData('text');
-      setApiKey(pastedData);
+      apiKeyStorage.set(pastedData);
     }
   };
 
@@ -56,7 +56,7 @@ export function Header({
   };
 
   const handleDelete = () => {
-    setApiKey('');
+    apiKeyStorage.set('');
   };
 
   return (

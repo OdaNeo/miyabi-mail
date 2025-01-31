@@ -1,11 +1,11 @@
 {
   "extensionDescription": {
-    "description": "Extension description",
-    "message": "Chrome extension boilerplate developed with Vite, React and Typescript"
+    "description": "AI-powered Japanese email generation and refinement.",
+    "message": "AI-powered Japanese email generation and refinement."
   },
   "extensionName": {
-    "description": "Extension name",
-    "message": "Chrome extension boilerplate"
+    "description": "雅返信",
+    "message": "雅返信"
   },
   "toggleTheme": {
     "message": "Toggle theme"
@@ -14,17 +14,17 @@
     "message": "Loading..."
   },
   "greeting": {
-    "description": "Greeting message",
+    "description": "こんにちは",
     "message": "Hello, My name is $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "John Doe"
+        "example": "Oda　Neo"
       }
     }
   },
   "hello": {
-    "description": "Placeholder example",
+    "description": "こんにちは",
     "message": "Hello $1"
   }
 }

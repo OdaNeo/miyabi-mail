@@ -1,15 +1,22 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
-import { apiKeyStorage, apiVersionStorage, darkModeStorage, inputTextStorage, replyStorage } from '@extension/storage';
+import {
+  apiKeyStorage,
+  apiVersionStorage,
+  darkModeStorage,
+  inputTextStorage,
+  replyStorage,
+  translationStorage,
+} from '@extension/storage';
 import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import OpenAI from 'openai';
-import { PROMPT, rolePrompt } from './utils/tts';
+import { type PROMPT_KEYS, rolePrompt } from './utils/tts';
 import { useStorage } from '@extension/shared';
 import { Reply } from '@src/components/Reply';
 import { Button } from '@src/components/ui/button';
 import { Header } from '@src/components/Header';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, AlertTriangle } from 'lucide-react';
+import { X, AlertTriangle, Languages } from 'lucide-react';
 import { Textarea } from '@src/components/ui/textarea';
 import { isLikelyEmail } from './utils/emailDetection';
 import { Switch } from './components/ui/switch';
@@ -20,35 +27,37 @@ import { Input } from './components/ui/input';
 const isDev = import.meta.env.MODE === 'development';
 
 const Popup = () => {
-  const apiKeyFromStorage = useStorage(apiKeyStorage);
+  const apiKey = useStorage(apiKeyStorage);
   const inputTextFromStorage = useStorage(inputTextStorage);
-  const replyFromStorage = useStorage(replyStorage);
+  const reply = useStorage(replyStorage);
   const darkMode = useStorage(darkModeStorage);
   const apiVersion = useStorage(apiVersionStorage);
 
-  const [apiKey, setApiKey] = useState(apiKeyFromStorage);
   const [subject, setSubject] = useState('');
   const [inputText, setInputText] = useState(inputTextFromStorage);
-  const [reply, setReply] = useState(replyFromStorage);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isEmailContent, setIsEmailContent] = useState(true);
   const [autoSubject, setAutoSubject] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [isTranslationLoading, setIsTranslationLoading] = useState(false);
+  const [translationProgress, setTranslationProgress] = useState(0);
+
   const [isError, setIsError] = useState(false);
 
-  const [expandedSection, setExpandedSection] = useState<PROMPT | null>(null);
+  const [expandedSection, setExpandedSection] = useState<PROMPT_KEYS | null>(null);
 
   useEffect(() => {
-    if (!apiKeyFromStorage) {
-      setApiKey(isDev ? import.meta.env.VITE_OPENAI_API_KEY : '');
+    if (!apiKey) {
+      apiKeyStorage.set(isDev ? import.meta.env.VITE_OPENAI_API_KEY : '');
     }
-    if (inputTextFromStorage && replyFromStorage) {
+    if (inputTextFromStorage && reply) {
       setIsGenerated(true);
-      setExpandedSection(PROMPT.JAPANESE_REPLY);
+      setExpandedSection('JAPANESE_REPLY');
     }
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -74,10 +83,39 @@ const Popup = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    apiKeyStorage.set(apiKey);
+    if (isTranslationLoading) {
+      const timer = setInterval(() => {
+        setTranslationProgress(oldProgress => {
+          const newProgress = Math.min(oldProgress + 1, 95);
+          if (newProgress === 95) {
+            clearInterval(timer);
+          }
+          return newProgress;
+        });
+      }, 80);
+      return () => clearInterval(timer);
+    }
+    return;
+  }, [isTranslationLoading]);
+
+  useEffect(() => {
     inputTextStorage.set(inputText);
-    replyStorage.set(reply);
-  }, [apiKey, subject, inputText, reply]);
+  }, [inputText]);
+
+  const handleOpenAI = async (prompt: string) => {
+    const client = new OpenAI({ apiKey: apiKey, dangerouslyAllowBrowser: true });
+    const chatCompletion = await client.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      model: apiVersion,
+      temperature: 0.7,
+    });
+    return chatCompletion.choices[0]?.message?.content || '';
+  };
 
   const handleReply = async () => {
     if (!apiKey) {
@@ -92,24 +130,46 @@ const Popup = () => {
     setIsError(false);
     setProgress(0);
     try {
-      const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
-
-      const chatCompletion = await client.chat.completions.create({
-        messages: [{ role: 'user', content: rolePrompt(inputText.trim(), subject.trim()) }],
-        model: apiVersion,
-        temperature: 0.7,
-      });
-
-      setReply(chatCompletion.choices[0]?.message?.content || '');
+      const prompt = rolePrompt(inputText?.trim(), 'JAPANESE_REPLY', subject?.trim());
+      const chatCompletion = await handleOpenAI(prompt);
+      replyStorage.set(chatCompletion);
       setIsGenerated(true);
       setIsLoading(false);
-      setExpandedSection(PROMPT.JAPANESE_REPLY);
+      setExpandedSection('JAPANESE_REPLY');
       setProgress(100);
     } catch (e) {
       console.error(e);
       setIsError(true);
       setIsLoading(false);
       setProgress(0);
+    }
+  };
+
+  const handleTranslation = async () => {
+    if (!apiKey) {
+      setIsOpen(true);
+      return;
+    }
+    if (!inputText) {
+      return;
+    }
+    setIsGenerated(false);
+    setIsTranslationLoading(true);
+    setIsError(false);
+    setTranslationProgress(0);
+    try {
+      const prompt = rolePrompt(inputText.trim(), 'TRANSLATION');
+      const chatCompletion = await handleOpenAI(prompt);
+      translationStorage.set(chatCompletion);
+      setIsGenerated(true);
+      setIsTranslationLoading(false);
+      setExpandedSection('TRANSLATION');
+      setTranslationProgress(100);
+    } catch (e) {
+      console.error(e);
+      setIsError(true);
+      setIsTranslationLoading(false);
+      setTranslationProgress(0);
     }
   };
 
@@ -123,15 +183,14 @@ const Popup = () => {
   const handleInputTextClear = () => {
     setInputText('');
     setSubject('');
-    setReply('');
+    replyStorage.set('');
+    translationStorage.set('');
     setAutoSubject(true);
+    setIsEmailContent(true);
     setIsGenerated(false);
     setExpandedSection(null);
   };
-  const handleToggleDarkMode = () => {
-    document.documentElement.classList.toggle('dark');
-    darkModeStorage.set(!darkMode);
-  };
+
   const handleOnPaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
     const text = e.clipboardData.getData('text/plain');
     setIsEmailContent(isLikelyEmail(text));
@@ -145,17 +204,10 @@ const Popup = () => {
 
   return (
     <div
-      className="w-[300px] h-[450px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
+      className="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
     dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
     >
-      <Header
-        darkMode={darkMode}
-        apiKey={apiKey}
-        isOpen={isOpen}
-        handleToggleDarkMode={handleToggleDarkMode}
-        setApiKey={setApiKey}
-        setIsOpen={setIsOpen}
-      />
+      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
 
       {isError && (
         <div className="text-red-500 flex items-center text-xs">
@@ -205,7 +257,7 @@ const Popup = () => {
           </div>
         )}
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <div className="flex items-center space-x-2">
             <Switch
               disabled={isLoading}
@@ -217,17 +269,35 @@ const Popup = () => {
               件名を自動生成
             </Label>
           </div>
+          <div className="flex-1"></div>
+          <Button
+            onClick={handleTranslation}
+            disabled={isTranslationLoading || isLoading || !inputText.trim()}
+            className="relative overflow-hidden h-7 px-3 text-xs
+            bg-slate-200 hover:bg-slate-300 text-slate-900
+            dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+          >
+            <Languages className="h-4 w-4" />
+            {isTranslationLoading ? <span>翻訳中...</span> : <span>翻訳</span>}
+            {isTranslationLoading && (
+              <Progress
+                value={translationProgress}
+                className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-400 dark:bg-emerald-500"
+              />
+            )}
+          </Button>
           <Button
             onClick={handleReply}
-            disabled={isLoading || !inputText.trim()}
-            className="relative overflow-hidden h-7 text-xs text-white 
-            dark:bg-emerald-600 dark:hover:bg-emerald-700 bg-emerald-500  hover:bg-emerald-600"
+            disabled={isTranslationLoading || isLoading || !inputText.trim()}
+            className="relative overflow-hidden ml-3 h-7 px-3 text-xs
+            bg-emerald-500 hover:bg-emerald-600 text-white
+            dark:bg-emerald-600 dark:hover:bg-emerald-700"
           >
             {isLoading ? <span>生成中...</span> : <span>返信を生成</span>}
             {isLoading && (
               <Progress
                 value={progress}
-                className="absolute bottom-0 left-0 right-0 h-1 dark:bg-emerald-800 bg-emerald-300"
+                className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-300 dark:bg-emerald-400"
               />
             )}
           </Button>
@@ -243,12 +313,7 @@ const Popup = () => {
           />
         )}
 
-        <Reply
-          replyOrigin={reply}
-          isGenerated={isGenerated}
-          expandedSection={expandedSection}
-          setExpandedSection={setExpandedSection}
-        />
+        <Reply isGenerated={isGenerated} expandedSection={expandedSection} setExpandedSection={setExpandedSection} />
       </div>
     </div>
   );

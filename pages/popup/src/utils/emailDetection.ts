@@ -1,11 +1,12 @@
 export function isLikelyEmail(text: string): boolean {
-  const hasEmailHeaders = /^(差出人|宛先|件名|日付|様):/im.test(text);
+  const japaneseHeaders = /(差出人|宛先|件名|日付|様)/im.test(text);
 
-  const hasEmailAddress = /@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(text);
+  const commonGreeting = /(お世話になっております|ご連絡ありがとうございます|いつもお世話になっております)/.test(text);
+  const commonClosing = /(よろしくお願いいたします|何卒よろしくお願いいたします|敬具|以上)/.test(text);
 
-  const hasSignature = /(よろしくお願いします|敬具|以上)/m.test(text);
+  const totalChars = text.length;
+  const japaneseChars = (text.match(/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g) || []).length;
+  const ratio = totalChars > 0 ? japaneseChars / totalChars : 0;
 
-  const hasDateTime = /\d{4}年\d{1,2}月\d{1,2}日/.test(text);
-
-  return [hasEmailHeaders, hasEmailAddress, hasSignature, hasDateTime].filter(Boolean).length >= 2;
+  return ratio > 0.2 && (commonGreeting || commonClosing || japaneseHeaders);
 }
