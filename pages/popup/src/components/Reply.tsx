@@ -8,18 +8,15 @@ import { useState } from 'react';
 import { MessageBox } from './ui/MessageBox';
 import { replyStorage, translationStorage } from '@extension/storage';
 import { useStorage } from '@extension/shared';
+import { useGeneratedStore } from '@src/store/generatedStore';
+import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
 
-export function Reply({
-  isGenerated,
-  expandedSection,
-  setExpandedSection,
-}: {
-  isGenerated: boolean;
-  expandedSection: PROMPT_KEYS | null;
-  setExpandedSection: (section: PROMPT_KEYS | null) => void;
-}) {
+export function Reply() {
   const replyFromStorage = useStorage(replyStorage);
   const translationFromStorage = useStorage(translationStorage);
+
+  const { isGenerated } = useGeneratedStore();
+  const { expandedSection, setExpandedSection } = useExpandedSectionStore();
 
   const [copied, setCopied] = useState(false);
 

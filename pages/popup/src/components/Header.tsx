@@ -8,16 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage, apiVersionStorage, darkModeStorage } from '@extension/storage';
 import type React from 'react';
+import { useOpenStore } from '@src/store/openStore';
 
-export function Header({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}) {
+export function Header() {
   const darkMode = useStorage(darkModeStorage);
   const apiKey = useStorage(apiKeyStorage);
+
+  const { isOpen, setIsOpen } = useOpenStore();
 
   const [showKey, setShowKey] = useState(false);
 

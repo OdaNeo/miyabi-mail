@@ -8,9 +8,9 @@ import {
   replyStorage,
   translationStorage,
 } from '@extension/storage';
-import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
+import { useCallback, useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import OpenAI from 'openai';
-import { type PROMPT_KEYS, rolePrompt } from './utils/tts';
+import { rolePrompt } from './utils/tts';
 import { useStorage } from '@extension/shared';
 import { Reply } from '@src/components/Reply';
 import { Button } from '@src/components/ui/button';
@@ -23,6 +23,10 @@ import { Switch } from './components/ui/switch';
 import { Label } from './components/ui/label';
 import { Progress } from './components/ui/progress';
 import { Input } from './components/ui/input';
+import { useProgress } from './hooks/useProgress';
+import { useOpenStore } from './store/openStore';
+import { useGeneratedStore } from './store/generatedStore';
+import { useExpandedSectionStore } from './store/expandedSectionStore';
 
 const isDev = import.meta.env.MODE === 'development';
 
@@ -36,20 +40,21 @@ const Popup = () => {
   const [subject, setSubject] = useState('');
   const [inputText, setInputText] = useState(inputTextFromStorage);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const { setIsOpen } = useOpenStore();
+  const { setIsGenerated } = useGeneratedStore();
+
   const [isEmailContent, setIsEmailContent] = useState(true);
   const [autoSubject, setAutoSubject] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isGenerated, setIsGenerated] = useState(false);
-  const [progress, setProgress] = useState(0);
-
   const [isTranslationLoading, setIsTranslationLoading] = useState(false);
-  const [translationProgress, setTranslationProgress] = useState(0);
+
+  const [progress, setProgress] = useProgress(isLoading);
+  const [translationProgress, setTranslationProgress] = useProgress(isTranslationLoading);
 
   const [isError, setIsError] = useState(false);
 
-  const [expandedSection, setExpandedSection] = useState<PROMPT_KEYS | null>(null);
+  const { setExpandedSection } = useExpandedSectionStore();
 
   useEffect(() => {
     if (!apiKey) {
@@ -67,110 +72,81 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading) {
-      const timer = setInterval(() => {
-        setProgress(oldProgress => {
-          const newProgress = Math.min(oldProgress + 1, 95);
-          if (newProgress === 95) {
-            clearInterval(timer);
-          }
-          return newProgress;
-        });
-      }, 80);
-      return () => clearInterval(timer);
-    }
-    return;
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isTranslationLoading) {
-      const timer = setInterval(() => {
-        setTranslationProgress(oldProgress => {
-          const newProgress = Math.min(oldProgress + 1, 95);
-          if (newProgress === 95) {
-            clearInterval(timer);
-          }
-          return newProgress;
-        });
-      }, 80);
-      return () => clearInterval(timer);
-    }
-    return;
-  }, [isTranslationLoading]);
-
-  useEffect(() => {
     inputTextStorage.set(inputText);
   }, [inputText]);
 
-  const handleOpenAI = async (prompt: string) => {
-    const client = new OpenAI({ apiKey: apiKey, dangerouslyAllowBrowser: true });
-    const chatCompletion = await client.chat.completions.create({
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      model: apiVersion,
-      temperature: 0.7,
+  const runOpenAIAction = useCallback(
+    async ({
+      prompt,
+      onStart,
+      onFinish,
+      onSuccess,
+    }: {
+      prompt: string;
+      onStart?: () => void;
+      onFinish?: () => void;
+      onSuccess?: (content: string) => void;
+    }) => {
+      if (!apiKey) {
+        setIsOpen(true);
+        return;
+      }
+      if (!inputText) {
+        return;
+      }
+      setIsGenerated(false);
+      setIsError(false);
+      try {
+        onStart?.();
+        const client = new OpenAI({
+          apiKey,
+          dangerouslyAllowBrowser: true,
+        });
+        const resp = await client.chat.completions.create({
+          messages: [{ role: 'user', content: prompt }],
+          model: apiVersion,
+          temperature: 0.7,
+        });
+        onSuccess?.(resp.choices[0]?.message?.content || '');
+        setIsGenerated(true);
+      } catch (e) {
+        console.error(e);
+        setIsError(true);
+      } finally {
+        onFinish?.();
+      }
+    },
+    [apiKey, inputText, apiVersion],
+  );
+
+  const handleReply = () => {
+    runOpenAIAction({
+      prompt: rolePrompt(inputText?.trim(), 'JAPANESE_REPLY', subject?.trim()),
+      onStart: () => {
+        setIsLoading(true), setProgress(0);
+      },
+      onFinish: () => {
+        setIsLoading(false), setProgress(0);
+      },
+      onSuccess: content => {
+        replyStorage.set(content), setExpandedSection('JAPANESE_REPLY');
+      },
     });
-    return chatCompletion.choices[0]?.message?.content || '';
   };
 
-  const handleReply = async () => {
-    if (!apiKey) {
-      setIsOpen(true);
-      return;
-    }
-    if (!inputText) {
-      return;
-    }
-    setIsGenerated(false);
-    setIsLoading(true);
-    setIsError(false);
-    setProgress(0);
-    try {
-      const prompt = rolePrompt(inputText?.trim(), 'JAPANESE_REPLY', subject?.trim());
-      const chatCompletion = await handleOpenAI(prompt);
-      replyStorage.set(chatCompletion);
-      setIsGenerated(true);
-      setIsLoading(false);
-      setExpandedSection('JAPANESE_REPLY');
-      setProgress(100);
-    } catch (e) {
-      console.error(e);
-      setIsError(true);
-      setIsLoading(false);
-      setProgress(0);
-    }
-  };
-
-  const handleTranslation = async () => {
-    if (!apiKey) {
-      setIsOpen(true);
-      return;
-    }
-    if (!inputText) {
-      return;
-    }
-    setIsGenerated(false);
-    setIsTranslationLoading(true);
-    setIsError(false);
-    setTranslationProgress(0);
-    try {
-      const prompt = rolePrompt(inputText.trim(), 'TRANSLATION');
-      const chatCompletion = await handleOpenAI(prompt);
-      translationStorage.set(chatCompletion);
-      setIsGenerated(true);
-      setIsTranslationLoading(false);
-      setExpandedSection('TRANSLATION');
-      setTranslationProgress(100);
-    } catch (e) {
-      console.error(e);
-      setIsError(true);
-      setIsTranslationLoading(false);
-      setTranslationProgress(0);
-    }
+  const handleTranslation = () => {
+    runOpenAIAction({
+      prompt: rolePrompt(inputText?.trim(), 'TRANSLATION'),
+      onStart: () => {
+        setIsTranslationLoading(true), setTranslationProgress(0);
+      },
+      onFinish: () => {
+        setIsTranslationLoading(false), setTranslationProgress(0);
+      },
+      onSuccess: content => {
+        translationStorage.set(content), setExpandedSection('TRANSLATION');
+      },
+    });
   };
 
   const handleSetSubject = (e: ChangeEvent<HTMLInputElement>) => {
@@ -207,7 +183,7 @@ const Popup = () => {
       className="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
     dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
     >
-      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Header />
 
       {isError && (
         <div className="text-red-500 flex items-center text-xs">
@@ -313,7 +289,7 @@ const Popup = () => {
           />
         )}
 
-        <Reply isGenerated={isGenerated} expandedSection={expandedSection} setExpandedSection={setExpandedSection} />
+        <Reply />
       </div>
     </div>
   );
