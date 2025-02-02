@@ -1,6 +1,6 @@
 {
   "name": "miyabi-mail",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "license": "MIT",
   "repository": {
@@ -26,7 +26,7 @@
     "lint": "biome format",
     "lint:fix": "biome format --write",
     "prepare": "husky",
-    "update-version": "commit-and-tag-version patch --skip.tag --skip.commit && node update_version.cjs"
+    "update-version": "commit-and-tag-version patch --skip.tag --skip.commit && node update_version.cjs && git add . && node -e \"const v=require('./package.json').version; require('child_process').spawnSync('git', ['commit','-m',`chore: update version v${v}`], {stdio:'inherit'})\""
   },
   "dependencies": {
     "openai": "^4.79.1",
