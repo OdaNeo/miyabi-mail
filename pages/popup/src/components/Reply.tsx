@@ -12,8 +12,8 @@ import { useGeneratedStore } from '@src/store/generatedStore';
 import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
 
 export function Reply() {
-  const replyFromStorage = useStorage(replyStorage);
-  const translationFromStorage = useStorage(translationStorage);
+  const reply = useStorage(replyStorage);
+  const translation = useStorage(translationStorage);
 
   const { isGenerated } = useGeneratedStore();
   const { expandedSection, setExpandedSection } = useExpandedSectionStore();
@@ -26,7 +26,7 @@ export function Reply() {
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText(replyFromStorage)
+      .writeText(reply)
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -89,7 +89,7 @@ export function Reply() {
                 </div>
               </div>
               {expandedSection === section && (
-                <MessageBox>{section === 'TRANSLATION' ? translationFromStorage : replyFromStorage}</MessageBox>
+                <MessageBox>{section === 'TRANSLATION' ? translation : reply}</MessageBox>
               )}
             </div>
           ))}

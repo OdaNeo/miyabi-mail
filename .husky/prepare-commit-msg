@@ -1,0 +1,1 @@
+pnpm dlx commit-and-tag-version patch --skip.tag --skip.commit

@@ -3,7 +3,6 @@ import { withErrorBoundary, withSuspense } from '@extension/shared';
 import {
   apiKeyStorage,
   apiVersionStorage,
-  darkModeStorage,
   inputTextStorage,
   replyStorage,
   translationStorage,
@@ -27,14 +26,11 @@ import { useProgress } from './hooks/useProgress';
 import { useOpenStore } from './store/openStore';
 import { useGeneratedStore } from './store/generatedStore';
 import { useExpandedSectionStore } from './store/expandedSectionStore';
-
-const isDev = import.meta.env.MODE === 'development';
+import { useInitial } from './hooks/useInitial';
 
 const Popup = () => {
   const apiKey = useStorage(apiKeyStorage);
   const inputTextFromStorage = useStorage(inputTextStorage);
-  const reply = useStorage(replyStorage);
-  const darkMode = useStorage(darkModeStorage);
   const apiVersion = useStorage(apiVersionStorage);
 
   const [subject, setSubject] = useState('');
@@ -56,20 +52,7 @@ const Popup = () => {
 
   const { setExpandedSection } = useExpandedSectionStore();
 
-  useEffect(() => {
-    if (!apiKey) {
-      apiKeyStorage.set(isDev ? import.meta.env.VITE_OPENAI_API_KEY : '');
-    }
-    if (inputTextFromStorage && reply) {
-      setIsGenerated(true);
-      setExpandedSection('JAPANESE_REPLY');
-    }
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+  useInitial();
 
   useEffect(() => {
     inputTextStorage.set(inputText);
