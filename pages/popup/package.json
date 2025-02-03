@@ -13,7 +13,8 @@
     "dev": "cross-env __DEV__=true vite build --mode development",
     "lint": "biome format",
     "lint:fix": "biome format --write",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "cross-env __DEV__=true vitest --coverage --run"
   },
   "dependencies": {
     "@extension/shared": "workspace:*",
@@ -38,6 +39,8 @@
     "@extension/tailwindcss-config": "workspace:*",
     "@extension/tsconfig": "workspace:*",
     "@extension/vite-config": "workspace:*",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "cross-env": "^7.0.3",
     "postcss-load-config": "^6.0.1"
   },

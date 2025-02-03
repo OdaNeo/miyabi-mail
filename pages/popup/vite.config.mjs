@@ -14,4 +14,10 @@ export default withPageConfig({
   build: {
     outDir: resolve(rootDir, '..', '..', 'dist', 'popup'),
   },
+  test: {
+    coverage: {
+      exclude: ['**/src/components/ui/**'],
+      include: ['**/src/**'],
+    },
+  },
 });
