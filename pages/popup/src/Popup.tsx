@@ -8,7 +8,7 @@ import {
   translationStorage,
 } from '@extension/storage';
 import { useCallback, useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
-import OpenAI from 'openai';
+import OpenAI, { APIConnectionError, APIError, RateLimitError } from 'openai';
 import { rolePrompt } from './utils/tts';
 import { useStorage } from '@extension/shared';
 import { Reply } from '@src/components/Reply';
@@ -48,7 +48,7 @@ const Popup = () => {
   const [progress, setProgress] = useProgress(isLoading);
   const [translationProgress, setTranslationProgress] = useProgress(isTranslationLoading);
 
-  const [isError, setIsError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { setExpandedSection } = useExpandedSectionStore();
 
@@ -78,7 +78,7 @@ const Popup = () => {
         return;
       }
       setIsGenerated(false);
-      setIsError(false);
+      setErrorMsg('');
       try {
         onStart?.();
         const client = new OpenAI({
@@ -92,9 +92,16 @@ const Popup = () => {
         });
         onSuccess?.(resp.choices[0]?.message?.content || '');
         setIsGenerated(true);
-      } catch (e) {
-        console.error(e);
-        setIsError(true);
+      } catch (e: unknown) {
+        if (e instanceof APIConnectionError) {
+          setErrorMsg('Failed to connect to OpenAI API: ' + e.message);
+        } else if (e instanceof RateLimitError) {
+          setErrorMsg('OpenAI API request exceeded rate limit: ' + e.message);
+        } else if (e instanceof APIError) {
+          setErrorMsg('OpenAI API returned an API Error: ' + e.message);
+        } else {
+          setErrorMsg('An unknown error occurred:' + e);
+        }
       } finally {
         onFinish?.();
       }
@@ -137,11 +144,12 @@ const Popup = () => {
   };
   const handleInputTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
-    setIsError(false);
+    setErrorMsg('');
   };
   const handleInputTextClear = () => {
     setInputText('');
     setSubject('');
+    setErrorMsg('');
     replyStorage.set('');
     translationStorage.set('');
     setAutoSubject(true);
@@ -168,10 +176,10 @@ const Popup = () => {
     >
       <Header />
 
-      {isError && (
+      {errorMsg && (
         <div className="text-red-500 flex items-center text-xs">
           <AlertTriangle className="h-3 w-3 mr-1" />
-          サーバーエラーが発生しました。しばらくしてから再試行してください。
+          {errorMsg}
         </div>
       )}
 
