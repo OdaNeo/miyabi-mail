@@ -227,7 +227,7 @@ const Popup = () => {
         <div className="flex items-center">
           <div className="flex items-center space-x-2">
             <Switch
-              disabled={isLoading}
+              disabled={isTranslationLoading || isLoading}
               id="auto-subject"
               checked={autoSubject}
               onCheckedChange={handleSetAutoSubject}
@@ -274,6 +274,7 @@ const Popup = () => {
           <Input
             placeholder="メールの件名を入力してください"
             value={subject}
+            disabled={isTranslationLoading || isLoading}
             onChange={handleSetSubject}
             className="text-xs dark:bg-slate-800 
             dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500"
