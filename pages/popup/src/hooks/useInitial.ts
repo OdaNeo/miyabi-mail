@@ -32,7 +32,7 @@ export const useInitial = () => {
         setExpandedSection('TRANSLATION');
       } else if (reply) {
         setIsGenerated(true);
-        setExpandedSection('JAPANESE_REPLY');
+        setExpandedSection('REPLY');
       }
     }
   }, []);

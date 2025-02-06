@@ -1,4 +1,4 @@
-import { PROMPT, type PROMPT_KEYS } from '@src/utils/tts';
+import type { PROMPT_KEYS } from '@src/utils/tts';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Label } from './ui/label';
 import { ChevronDown, ChevronUp, ClipboardCopy } from 'lucide-react';
@@ -45,7 +45,7 @@ export function Reply() {
           exit={{ opacity: 0, height: 0 }}
           className="space-y-2 overflow-hidden"
         >
-          {(Object.keys(PROMPT) as PROMPT_KEYS[]).map(section => (
+          {(['TRANSLATION', 'REPLY'] as PROMPT_KEYS[]).map(section => (
             <div key={section} className="space-y-1">
               <div
                 className="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -62,7 +62,7 @@ export function Reply() {
                   {section === 'TRANSLATION' ? '原文の翻訳：' : '日本語の返信：'}
                 </Label>
                 <div className="flex items-center space-x-1">
-                  {section === 'JAPANESE_REPLY' && (
+                  {section === 'REPLY' && (
                     <Button
                       variant="outline"
                       size="sm"

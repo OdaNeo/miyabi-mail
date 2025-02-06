@@ -15,9 +15,9 @@ import { Reply } from '@src/components/Reply';
 import { Button } from '@src/components/ui/button';
 import { Header } from '@src/components/Header';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, AlertTriangle, Languages } from 'lucide-react';
+import { X, AlertTriangle, Languages, Wand2Icon } from 'lucide-react';
 import { Textarea } from '@src/components/ui/textarea';
-import { isLikelyEmail } from './utils/emailDetection';
+import { isLikelyEmail } from './utils/email.detection';
 import { Switch } from './components/ui/switch';
 import { Label } from './components/ui/label';
 import { Progress } from './components/ui/progress';
@@ -42,11 +42,15 @@ const Popup = () => {
   const [isEmailContent, setIsEmailContent] = useState(true);
   const [autoSubject, setAutoSubject] = useState(true);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isReplyLoading, setIsReplyLoading] = useState(false);
   const [isTranslationLoading, setIsTranslationLoading] = useState(false);
+  const [isPolishingLoading, setIsPolishingLoading] = useState(false);
 
-  const [progress, setProgress] = useProgress(isLoading);
+  const isLoading = isReplyLoading || isTranslationLoading || isPolishingLoading;
+
+  const [replyProgress, setReplyProgress] = useProgress(isReplyLoading);
   const [translationProgress, setTranslationProgress] = useProgress(isTranslationLoading);
+  const [polishingProgress, setPolishingProgress] = useProgress(isPolishingLoading);
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -91,7 +95,6 @@ const Popup = () => {
           temperature: 0.7,
         });
         onSuccess?.(resp.choices[0]?.message?.content || '');
-        setIsGenerated(true);
       } catch (e: unknown) {
         if (e instanceof APIConnectionError) {
           setErrorMsg('Failed to connect to OpenAI API: ' + e.message);
@@ -111,15 +114,15 @@ const Popup = () => {
 
   const handleReply = () => {
     runOpenAIAction({
-      prompt: rolePrompt(inputText?.trim(), 'JAPANESE_REPLY', subject?.trim()),
+      prompt: rolePrompt(inputText?.trim(), 'REPLY', subject?.trim()),
       onStart: () => {
-        setIsLoading(true), setProgress(0);
+        setIsReplyLoading(true), setReplyProgress(0);
       },
       onFinish: () => {
-        setIsLoading(false), setProgress(0);
+        setIsReplyLoading(false), setReplyProgress(0);
       },
       onSuccess: content => {
-        replyStorage.set(content), setExpandedSection('JAPANESE_REPLY');
+        setIsGenerated(true), replyStorage.set(content), setExpandedSection('REPLY');
       },
     });
   };
@@ -134,7 +137,22 @@ const Popup = () => {
         setIsTranslationLoading(false), setTranslationProgress(0);
       },
       onSuccess: content => {
-        translationStorage.set(content), setExpandedSection('TRANSLATION');
+        setIsGenerated(true), translationStorage.set(content), setExpandedSection('TRANSLATION');
+      },
+    });
+  };
+
+  const handlePolishing = () => {
+    runOpenAIAction({
+      prompt: rolePrompt(inputText?.trim(), 'POLISHING'),
+      onStart: () => {
+        setIsPolishingLoading(true), setPolishingProgress(0);
+      },
+      onFinish: () => {
+        setIsPolishingLoading(false), setPolishingProgress(0);
+      },
+      onSuccess: content => {
+        setIsGenerated(false), setInputText(content), setExpandedSection(null);
       },
     });
   };
@@ -171,7 +189,7 @@ const Popup = () => {
 
   return (
     <div
-      className="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
+      className="w-[500px] h-[400px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
     dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
     >
       <Header />
@@ -227,7 +245,7 @@ const Popup = () => {
         <div className="flex items-center">
           <div className="flex items-center space-x-2">
             <Switch
-              disabled={isTranslationLoading || isLoading}
+              disabled={isLoading}
               id="auto-subject"
               checked={autoSubject}
               onCheckedChange={handleSetAutoSubject}
@@ -238,9 +256,25 @@ const Popup = () => {
           </div>
           <div className="flex-1"></div>
           <Button
+            onClick={handlePolishing}
+            disabled={isLoading || !inputText.trim()}
+            className="relative overflow-hidden ml-3 h-7 px-3 text-xs
+            bg-slate-200 hover:bg-slate-300 text-slate-900
+            dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+          >
+            <Wand2Icon className="h-4 w-4" />
+            {isPolishingLoading ? <span>洗練中...</span> : <span>文章を洗練</span>}
+            {isPolishingLoading && (
+              <Progress
+                value={polishingProgress}
+                className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-400 dark:bg-emerald-500"
+              />
+            )}
+          </Button>
+          <Button
             onClick={handleTranslation}
-            disabled={isTranslationLoading || isLoading || !inputText.trim()}
-            className="relative overflow-hidden h-7 px-3 text-xs
+            disabled={isLoading || !inputText.trim()}
+            className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-slate-200 hover:bg-slate-300 text-slate-900
             dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
           >
@@ -255,15 +289,15 @@ const Popup = () => {
           </Button>
           <Button
             onClick={handleReply}
-            disabled={isTranslationLoading || isLoading || !inputText.trim()}
+            disabled={isLoading || !inputText.trim()}
             className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-emerald-500 hover:bg-emerald-600 text-white
             dark:bg-emerald-600 dark:hover:bg-emerald-700"
           >
-            {isLoading ? <span>生成中...</span> : <span>返信を生成</span>}
-            {isLoading && (
+            {isReplyLoading ? <span>生成中...</span> : <span>返信を生成</span>}
+            {isReplyLoading && (
               <Progress
-                value={progress}
+                value={replyProgress}
                 className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-300 dark:bg-emerald-400"
               />
             )}
@@ -274,7 +308,7 @@ const Popup = () => {
           <Input
             placeholder="メールの件名を入力してください"
             value={subject}
-            disabled={isTranslationLoading || isLoading}
+            disabled={isLoading}
             onChange={handleSetSubject}
             className="text-xs dark:bg-slate-800 
             dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500"
