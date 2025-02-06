@@ -44,7 +44,10 @@ export const i18nStorage = {
   ...storage,
   next: async () => {
     await storage.set(currentLanguage => {
-      return currentLanguage.next!;
+      if (!currentLanguage || currentLanguage.next === null) {
+        return languageList.head;
+      }
+      return currentLanguage.next;
     });
   },
 };
