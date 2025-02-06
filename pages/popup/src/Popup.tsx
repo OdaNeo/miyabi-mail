@@ -27,6 +27,7 @@ import { useOpenStore } from './store/openStore';
 import { useGeneratedStore } from './store/generatedStore';
 import { useExpandedSectionStore } from './store/expandedSectionStore';
 import { useInitial } from './hooks/useInitial';
+import { useI18n } from './hooks/useI18n';
 
 const Popup = () => {
   const apiKey = useStorage(apiKeyStorage);
@@ -57,6 +58,19 @@ const Popup = () => {
   const { setExpandedSection } = useExpandedSectionStore();
 
   useInitial();
+
+  const {
+    INPUT_PLACEHOLDER,
+    IS_NOT_MAIL_CONTEST,
+    GENERATE_SUBJECT,
+    IS_POLISHING,
+    POLISH,
+    IS_TRANSLATING,
+    TRANSLATION,
+    INPUT_SUBJECT,
+    IS_GENERATING,
+    GENERATE,
+  } = useI18n();
 
   useEffect(() => {
     inputTextStorage.set(inputText);
@@ -204,7 +218,7 @@ const Popup = () => {
       <div className="flex-grow flex flex-col space-y-2 overflow-hidden">
         <div className="relative flex-grow">
           <Textarea
-            placeholder="元の日本語メールを入力してください"
+            placeholder={INPUT_PLACEHOLDER}
             value={inputText}
             disabled={isLoading}
             onChange={handleInputTextChange}
@@ -238,7 +252,7 @@ const Popup = () => {
         {!isEmailContent && inputText && (
           <div className="flex items-center text-xs dark:text-amber-400 text-amber-500">
             <AlertTriangle className="h-3 w-3 mr-1" />
-            これはメールの内容ではない可能性があります。
+            {IS_NOT_MAIL_CONTEST}
           </div>
         )}
 
@@ -251,7 +265,7 @@ const Popup = () => {
               onCheckedChange={handleSetAutoSubject}
             />
             <Label htmlFor="auto-subject" className="text-xs cursor-pointer">
-              件名を自動生成
+              {GENERATE_SUBJECT}
             </Label>
           </div>
           <div className="flex-1"></div>
@@ -263,7 +277,7 @@ const Popup = () => {
             dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
           >
             <Wand2Icon className="h-4 w-4" />
-            {isPolishingLoading ? <span>洗練中...</span> : <span>文章を洗練</span>}
+            {isPolishingLoading ? <span>{IS_POLISHING}</span> : <span>{POLISH}</span>}
             {isPolishingLoading && (
               <Progress
                 value={polishingProgress}
@@ -279,7 +293,7 @@ const Popup = () => {
             dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
           >
             <Languages className="h-4 w-4" />
-            {isTranslationLoading ? <span>翻訳中...</span> : <span>翻訳</span>}
+            {isTranslationLoading ? <span>{IS_TRANSLATING}</span> : <span>{TRANSLATION}</span>}
             {isTranslationLoading && (
               <Progress
                 value={translationProgress}
@@ -294,7 +308,7 @@ const Popup = () => {
             bg-emerald-500 hover:bg-emerald-600 text-white
             dark:bg-emerald-600 dark:hover:bg-emerald-700"
           >
-            {isReplyLoading ? <span>生成中...</span> : <span>返信を生成</span>}
+            {isReplyLoading ? <span>{IS_GENERATING}</span> : <span>{GENERATE}</span>}
             {isReplyLoading && (
               <Progress
                 value={replyProgress}
@@ -306,7 +320,7 @@ const Popup = () => {
 
         {!autoSubject && (
           <Input
-            placeholder="メールの件名を入力してください"
+            placeholder={INPUT_SUBJECT}
             value={subject}
             disabled={isLoading}
             onChange={handleSetSubject}

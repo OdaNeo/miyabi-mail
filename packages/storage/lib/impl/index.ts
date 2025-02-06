@@ -4,3 +4,4 @@ export * from './replyStorage';
 export * from './darkModeStorage';
 export * from './apiVersionStorage';
 export * from './translationStorage';
+export * from './i18nStorage';

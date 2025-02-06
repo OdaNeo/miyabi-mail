@@ -1,14 +1,16 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@src/components/ui/tooltip';
 import { Button } from '@src/components/ui/button';
-import { Settings, Sun, Moon, AlertTriangle, EyeOff, Eye, Copy, Trash2 } from 'lucide-react';
+import { Settings, Sun, Moon, AlertTriangle, EyeOff, Eye, Copy, Trash2, Check, Globe } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/popover';
 import { useRef, useState } from 'react';
 import { Input } from '@src/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useStorage } from '@extension/shared';
-import { apiKeyStorage, apiVersionStorage, darkModeStorage } from '@extension/storage';
+import { apiKeyStorage, apiVersionStorage, darkModeStorage, i18nStorage } from '@extension/storage';
 import type React from 'react';
 import { useOpenStore } from '@src/store/openStore';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@src/hooks/useI18n';
 
 export function Header() {
   const darkMode = useStorage(darkModeStorage);
@@ -16,11 +18,19 @@ export function Header() {
 
   const { isOpen, setIsOpen } = useOpenStore();
 
+  const [isCopied, setIsCopied] = useState(false);
+
   const [showKey, setShowKey] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const apiVersion = useStorage(apiVersionStorage);
+
+  const { CHANGE_TO_LIGHT, CHANGE_TO_DARK, API_KEY_SETTING, PLEASE_SET_API_KEY, SAVE, CHANGE_LANGUAGE } = useI18n();
+
+  const handleSwitchLanguage = () => {
+    i18nStorage.next();
+  };
 
   const handleToggleDarkMode = () => {
     document.documentElement.classList.toggle('dark');
@@ -49,7 +59,12 @@ export function Header() {
   };
 
   const handleCopyKey = () => {
+    if (isCopied) {
+      return;
+    }
     navigator.clipboard.writeText(apiKey);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
   };
 
   const handleDelete = () => {
@@ -67,13 +82,30 @@ export function Header() {
                 variant="outline"
                 size="icon"
                 className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                onClick={handleSwitchLanguage}
+              >
+                <Globe className="h-3 w-3" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-slate-700 text-slate-100 dark:bg-slate-200 dark:text-slate-800">
+              {CHANGE_LANGUAGE}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                 onClick={handleToggleDarkMode}
               >
                 {darkMode ? <Sun className="h-3 w-3" /> : <Moon className="h-3 w-3" />}
               </Button>
             </TooltipTrigger>
             <TooltipContent className="bg-slate-700 text-slate-100 dark:bg-slate-200 dark:text-slate-800">
-              <p>{darkMode ? '切换到亮色模式' : '切换到暗色模式'}</p>
+              <p>{darkMode ? CHANGE_TO_LIGHT : CHANGE_TO_DARK}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -90,11 +122,11 @@ export function Header() {
           </PopoverTrigger>
           <PopoverContent className="w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
             <div className="space-y-2">
-              <h3 className="font-medium text-slate-800 dark:text-slate-200">設定 OpenAI API Key</h3>
+              <h3 className="font-medium text-slate-800 dark:text-slate-200">{API_KEY_SETTING}</h3>
               {!apiKey && (
                 <div className="text-red-500 flex items-center text-xs">
                   <AlertTriangle className="h-3 w-3 mr-1" />
-                  APIキーを設定してください。
+                  {PLEASE_SET_API_KEY}
                 </div>
               )}
               <div className="relative">
@@ -121,10 +153,34 @@ export function Header() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-slate-500 hover:text-slate-900"
+                      className="h-8 w-8 text-slate-500 hover:text-slate-900 relative"
                       onClick={handleCopyKey}
                     >
-                      <Copy className="h-4 w-4" />
+                      <AnimatePresence initial={false} mode="wait">
+                        {isCopied ? (
+                          <motion.div
+                            key="check"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute inset-0 flex items-center justify-center"
+                          >
+                            <Check className="h-4 w-4 text-green-500" />
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="copy"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute inset-0 flex items-center justify-center"
+                          >
+                            <Copy className="h-4 w-4" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </Button>
                   )}
                 </div>
@@ -146,7 +202,7 @@ export function Header() {
                   className="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
                   onClick={handleClosePopover}
                 >
-                  保存
+                  {SAVE}
                 </Button>
                 {apiKey && (
                   <Button variant="destructive" size="icon" onClick={handleDelete}>

@@ -10,6 +10,7 @@ import { replyStorage, translationStorage } from '@extension/storage';
 import { useStorage } from '@extension/shared';
 import { useGeneratedStore } from '@src/store/generatedStore';
 import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
+import { useI18n } from '@src/hooks/useI18n';
 
 export function Reply() {
   const reply = useStorage(replyStorage);
@@ -19,6 +20,7 @@ export function Reply() {
   const { expandedSection, setExpandedSection } = useExpandedSectionStore();
 
   const [copied, setCopied] = useState(false);
+  const { ORIGINAL_TRANSLATION, REPLY, COPY, COPIED } = useI18n();
 
   const toggleSection = (section: PROMPT_KEYS) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -59,7 +61,7 @@ export function Reply() {
                 tabIndex={0}
               >
                 <Label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                  {section === 'TRANSLATION' ? '原文の翻訳：' : '日本語の返信：'}
+                  {section === 'TRANSLATION' ? ORIGINAL_TRANSLATION : REPLY}
                 </Label>
                 <div className="flex items-center space-x-1">
                   {section === 'REPLY' && (
@@ -77,7 +79,7 @@ export function Reply() {
                           : 'text-slate-600 dark:text-slate-400',
                       )}
                     >
-                      {copied ? 'コピー済み' : 'コピー'}
+                      {copied ? COPIED : COPY}
                       <ClipboardCopy className="h-3 w-3 ml-1" />
                     </Button>
                   )}

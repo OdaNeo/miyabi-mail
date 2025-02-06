@@ -1,0 +1,23 @@
+{
+  "INPUT_PLACEHOLDER": "Please enter the text:",
+  "ORIGINAL_TRANSLATION": "Original Translation:",
+  "REPLY": "Reply:",
+  "COPY": "Copy",
+  "COPIED": "Copied!",
+  "PASTE_API_KEY": "Paste API Key",
+  "IS_NOT_MAIL_CONTEST": "This may not be the content of an email.",
+  "GENERATE_SUBJECT": "Generate subject automatically",
+  "IS_POLISHING": "Polishing...",
+  "POLISH": "Polish",
+  "TRANSLATION": "Translation",
+  "IS_TRANSLATING": "Translating...",
+  "IS_GENERATING": "Generating...",
+  "GENERATE": "Generate reply",
+  "INPUT_SUBJECT": "Please enter the subject",
+  "CHANGE_TO_LIGHT": "Switch to light mode",
+  "CHANGE_TO_DARK": "Switch to dark mode",
+  "API_KEY_SETTING": "Set OPENAI API Key",
+  "PLEASE_SET_API_KEY": "Please set the API key",
+  "SAVE": "Save",
+  "CHANGE_LANGUAGE": "Switch Language"
+}

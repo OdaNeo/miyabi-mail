@@ -1,0 +1,23 @@
+{
+  "INPUT_PLACEHOLDER": "请输入文本：",
+  "ORIGINAL_TRANSLATION": "原文翻译：",
+  "REPLY": "回复：",
+  "COPY": "复制",
+  "COPIED": "已复制！",
+  "PASTE_API_KEY": "粘贴 API 密钥",
+  "IS_NOT_MAIL_CONTEST": "这可能不是邮件内容。",
+  "GENERATE_SUBJECT": "自动生成主题",
+  "IS_POLISHING": "润色中...",
+  "POLISH": "润色",
+  "TRANSLATION": "翻译",
+  "IS_TRANSLATING": "翻译中...",
+  "IS_GENERATING": "生成中...",
+  "GENERATE": "生成回复",
+  "INPUT_SUBJECT": "请输入主题",
+  "CHANGE_TO_LIGHT": "切换到亮色模式",
+  "CHANGE_TO_DARK": "切换到暗色模式",
+  "API_KEY_SETTING": "设定 OPENAI API 密钥",
+  "PLEASE_SET_API_KEY": "请设置 API 密钥",
+  "SAVE": "保存",
+  "CHANGE_LANGUAGE": "切换语言"
+}

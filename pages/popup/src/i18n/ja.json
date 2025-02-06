@@ -1,0 +1,23 @@
+{
+  "INPUT_PLACEHOLDER": "テキストを入力してください：",
+  "ORIGINAL_TRANSLATION": "原文の翻訳：",
+  "REPLY": "返信：",
+  "COPY": "コピー",
+  "COPIED": "コピーしました！",
+  "PASTE_API_KEY": "APIキーを貼り付け",
+  "IS_NOT_MAIL_CONTEST": "これはメールの内容ではない可能性があります。",
+  "GENERATE_SUBJECT": "件名を自動生成",
+  "IS_POLISHING": "洗練中...",
+  "POLISH": "文章を洗練",
+  "TRANSLATION": "翻訳",
+  "IS_TRANSLATING": "翻訳中...",
+  "IS_GENERATING": "生成中...",
+  "GENERATE": "返信を生成",
+  "INPUT_SUBJECT": "件名を入力してください",
+  "CHANGE_TO_LIGHT": "ライトモードに切り替え",
+  "CHANGE_TO_DARK": "ダークモードに切り替え",
+  "API_KEY_SETTING": "OPENAI APIキーを設定",
+  "PLEASE_SET_API_KEY": "APIキーを設定してください",
+  "SAVE": "保存",
+  "CHANGE_LANGUAGE": "言語を切り替え"
+}

@@ -19,9 +19,8 @@ export const rolePrompt = (content: string, prompt: PROMPT_KEYS, main_idea?: str
   const mainIdeaText = main_idea ? `邮件的主要内容在简体中文中的意思是：\n\n${main_idea}\n\n` : '';
 
   return `
-    你是一个${detectedLanguage}语言专家，${promptText}\n\n
+    你是一个${detectedLanguage}语言专家，请务必认真，准确地执行任务。不要有多余的话语，不要有任何拼写错误。${promptText}\n\n
     ${content}\n\n
-    ${mainIdeaText}
-    请务必认真，准确地执行任务。不要有多余的话语，不要有任何拼写错误。
+    ${mainIdeaText}\n\n
   `.trim();
 };
