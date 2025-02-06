@@ -17,7 +17,7 @@ import { Header } from '@src/components/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertTriangle, Languages, Wand2Icon } from 'lucide-react';
 import { Textarea } from '@src/components/ui/textarea';
-import { isLikelyEmail } from './utils/email.detection';
+import { isLikelyEmail } from './utils/email';
 import { Switch } from './components/ui/switch';
 import { Label } from './components/ui/label';
 import { Progress } from './components/ui/progress';

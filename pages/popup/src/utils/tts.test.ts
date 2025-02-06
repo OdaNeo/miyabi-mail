@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 import { rolePrompt, PROMPT } from './tts';
-import { Language } from './language.detection';
+import { Language } from './language';
 
 vi.mock('./language-detection', () => ({
   detectLanguage: vi.fn((text: string) => {

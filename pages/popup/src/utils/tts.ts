@@ -1,4 +1,4 @@
-import { detectLanguage, Language } from './language.detection';
+import { detectLanguage, Language } from './language';
 
 export enum PROMPT {
   POLISHING = '你的任务是润色这段文本，文本内容如下：',

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { isLikelyEmail } from './email.detection';
+import { isLikelyEmail } from './email';
 
 describe('isLikelyEmail', () => {
   test('短文本', () => {

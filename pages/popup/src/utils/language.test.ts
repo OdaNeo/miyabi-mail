@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { detectLanguage, Language } from './language.detection';
+import { detectLanguage, Language } from './language';
 
 describe('detectLanguage', () => {
   test('空文本返回 unknown', () => {
