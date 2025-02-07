@@ -19,6 +19,7 @@ export const CopyButton = ({ handleCopyText }: { handleCopyText: () => void }) =
     <Button
       variant="ghost"
       size="icon"
+      data-testid="copy-icon-group"
       className="h-6 w-6 text-slate-500 hover:text-slate-900 relative"
       onClick={handleCopy}
     >

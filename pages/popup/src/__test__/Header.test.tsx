@@ -1,7 +1,16 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Header } from '../components/Header';
 import { vi } from 'vitest';
+import { i18nStorage } from '@extension/storage';
+
+const setIsOpen = vi.fn();
+vi.mock('@src/store/openStore', () => ({
+  useOpenStore: vi.fn(() => ({
+    isOpen: false,
+    setIsOpen,
+  })),
+}));
 
 vi.mock('@extension/shared', () => ({
   useStorage: vi.fn(),
@@ -42,6 +51,7 @@ vi.mock('@extension/storage', () => ({
 describe('Header Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    document.documentElement.classList.remove('dark');
   });
 
   it('should render Header component correctly', () => {
@@ -50,5 +60,33 @@ describe('Header Component', () => {
     expect(screen.getByText('雅返信')).toBeInTheDocument();
 
     expect(document.body).toMatchSnapshot();
+  });
+
+  it('should switch language when Globe button is clicked', () => {
+    render(<Header />);
+
+    const globeButton = screen.getByTestId('globe-icon');
+
+    fireEvent.click(globeButton);
+
+    expect(i18nStorage.next).toHaveBeenCalled();
+  });
+
+  it('should toggle dark mode when Moon button is clicked', () => {
+    render(<Header />);
+
+    const globeButton = screen.getByTestId('toggle-dark-mode');
+
+    fireEvent.click(globeButton);
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('should open popover when Settings button is clicked', async () => {
+    render(<Header />);
+
+    const settingsButton = screen.getByTestId('setting-icon');
+    fireEvent.click(settingsButton);
+    expect(setIsOpen).toHaveBeenCalledWith(true);
   });
 });

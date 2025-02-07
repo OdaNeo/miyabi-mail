@@ -1,7 +1,121 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Header Component > should render Header component correctly 1`] = `
-<body>
-  <div />
-</body>
+exports[`Reply Component > should not render when isGenerated is false 1`] = `<div />`;
+
+exports[`Reply Component > should render correctly when isGenerated is true 1`] = `
+<div>
+  <div
+    class="space-y-2 overflow-y-auto scrollbar-custom"
+    style="opacity: 0; height: 0px;"
+  >
+    <div
+      class="space-y-1"
+    >
+      <div
+        class="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        role="button"
+        tabindex="0"
+      >
+        <label
+          class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs font-medium text-slate-700 dark:text-slate-300"
+        >
+          Original Translation
+        </label>
+        <div
+          class="flex items-center space-x-1"
+        >
+          <svg
+            class="lucide lucide-chevron-down h-3 w-3 text-slate-500 dark:text-slate-400"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m6 9 6 6 6-6"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="space-y-1"
+    >
+      <div
+        class="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        role="button"
+        tabindex="0"
+      >
+        <label
+          class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs font-medium text-slate-700 dark:text-slate-300"
+        >
+          Reply
+        </label>
+        <div
+          class="flex items-center space-x-1"
+        >
+          <button
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 h-6 text-xs transition-colors text-slate-600 dark:text-slate-400"
+          >
+            Copy
+            <svg
+              class="lucide lucide-clipboard-copy h-3 w-3 ml-1"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="4"
+                rx="1"
+                ry="1"
+                width="8"
+                x="8"
+                y="2"
+              />
+              <path
+                d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
+              />
+              <path
+                d="M16 4h2a2 2 0 0 1 2 2v4"
+              />
+              <path
+                d="M21 14H11"
+              />
+              <path
+                d="m15 10-4 4 4 4"
+              />
+            </svg>
+          </button>
+          <svg
+            class="lucide lucide-chevron-down h-3 w-3 text-slate-500 dark:text-slate-400"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m6 9 6 6 6-6"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;

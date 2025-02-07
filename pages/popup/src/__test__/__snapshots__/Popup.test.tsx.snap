@@ -50,6 +50,7 @@ exports[`Header Component > should render Header component correctly 1`] = `
           <button
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
             data-state="closed"
+            data-testid="toggle-dark-mode"
           >
             <svg
               class="lucide lucide-moon h-3 w-3"
@@ -74,6 +75,7 @@ exports[`Header Component > should render Header component correctly 1`] = `
             aria-haspopup="dialog"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
             data-state="closed"
+            data-testid="setting-icon"
             type="button"
           >
             <svg
