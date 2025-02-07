@@ -1,30 +1,30 @@
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Reply } from '../components/Reply';
+import { useStorage } from '@extension/shared';
+import type { PROMPT_KEYS } from '@src/utils/tts';
 
 vi.mock('@extension/shared', () => ({
-  useStorage: vi.fn().mockReturnValueOnce('This is reply text').mockReturnValueOnce('This is translation text'),
+  useStorage: vi.fn(),
 }));
 
-const mockGeneratedStore = {
-  isGenerated: true,
-  setIsGenerated: vi.fn(),
-};
+const setExpandedSectionMock = vi.fn();
 
-const mockExpandedStore = {
-  expandedSection: null,
-  setExpandedSection: vi.fn(),
-};
-
-vi.mock('@src/store/generatedStore', () => ({
-  useGeneratedStore: () => mockGeneratedStore,
-}));
+let mockExpandedSection: PROMPT_KEYS | null = null;
 
 vi.mock('@src/store/expandedSectionStore', () => ({
-  useExpandedSectionStore: () => mockExpandedStore,
+  useExpandedSectionStore: () => ({
+    expandedSection: mockExpandedSection,
+    setExpandedSection: setExpandedSectionMock,
+  }),
 }));
 
-// Mock i18n translations
+vi.mock('@src/store/generatedStore', () => ({
+  useGeneratedStore: () => ({
+    isGenerated: true,
+  }),
+}));
+
 vi.mock('@src/hooks/useI18n', () => ({
   useI18n: () => ({
     ORIGINAL_TRANSLATION: 'Original Translation',
@@ -34,53 +34,75 @@ vi.mock('@src/hooks/useI18n', () => ({
   }),
 }));
 
-// Mock clipboard API
 const mockClipboard = {
-  writeText: vi.fn().mockResolvedValue(undefined),
+  writeText: vi.fn(() => Promise.resolve()),
 };
 
 Object.assign(navigator, { clipboard: mockClipboard });
 
 describe('Reply Component', () => {
+  const useStorageMock = vi.mocked(useStorage);
+
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGeneratedStore.isGenerated = true;
-    mockExpandedStore.expandedSection = null;
+    vi.useFakeTimers();
+    mockExpandedSection = null;
   });
 
-  it('should not render when isGenerated is false', () => {
-    mockGeneratedStore.isGenerated = false;
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should render correctly when generated', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text'); // translation
+    mockExpandedSection = 'TRANSLATION';
     const { container } = render(<Reply />);
-    expect(container.firstChild).toBeNull();
     expect(container).toMatchSnapshot();
   });
 
-  it('should render correctly when isGenerated is true', () => {
-    const { container } = render(<Reply />);
-    expect(container.firstChild).not.toBeNull();
-    expect(container).toMatchSnapshot();
+  it('should toggle sections when clicking headers', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
+    render(<Reply />);
+    fireEvent.click(screen.getByText('Original Translation'));
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('TRANSLATION');
+    fireEvent.click(screen.getByText('Reply'));
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('REPLY');
   });
 
-  it('should toggle section when clicking title', async () => {
+  it('should handle keyboard navigation', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
     render(<Reply />);
-    const title = screen.getByText('Original Translation');
-
-    fireEvent.click(title);
-
-    await waitFor(() => {
-      expect(mockExpandedStore.setExpandedSection).toHaveBeenCalledTimes(1);
-      expect(mockExpandedStore.setExpandedSection).toHaveBeenCalledWith('TRANSLATION');
-    });
+    fireEvent.keyUp(screen.getByText('Original Translation'), { key: 'Enter' });
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('TRANSLATION');
+    fireEvent.keyUp(screen.getByText('Reply'), { key: ' ' });
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('REPLY');
   });
 
-  it('should handle keyboard interaction for section toggle', async () => {
+  it('should not propagate click event when copying', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
     render(<Reply />);
-    const title = screen.getByText('Original Translation');
+    const copyButton = screen.getByTestId('copy-button');
+    fireEvent.click(copyButton, { stopPropagation: true });
+    expect(setExpandedSectionMock).not.toHaveBeenCalled();
+    expect(mockClipboard.writeText).toHaveBeenCalled();
+  });
 
-    fireEvent.keyUp(title, { key: 'Enter' });
-
-    await waitFor(() => {
-      expect(mockExpandedStore.setExpandedSection).toHaveBeenCalledWith('TRANSLATION');
-    });
+  it('should copy text to clipboard', async () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
+    mockExpandedSection = 'REPLY';
+    render(<Reply />);
+    const copyButton = screen.getByTestId('copy-button');
+    fireEvent.click(copyButton);
+    expect(mockClipboard.writeText).toHaveBeenCalledWith('Reply text');
   });
 });

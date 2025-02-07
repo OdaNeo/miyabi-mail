@@ -69,6 +69,7 @@ export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boole
           <Button
             variant="ghost"
             size="icon"
+            data-testid="eye-icon"
             className="h-8 w-8 text-slate-500 hover:text-slate-900"
             onClick={() => setShowKey(!showKey)}
           >
@@ -98,7 +99,7 @@ export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boole
           {SAVE}
         </Button>
         {apiKey && (
-          <Button variant="destructive" size="icon" onClick={handleDelete}>
+          <Button data-testid="delete-api-icon" variant="destructive" size="icon" onClick={handleDelete}>
             <Trash2 className="h-4 w-4" />
           </Button>
         )}

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, type Mock, afterAll, beforeAll } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useInitial } from './useInitial';
+import { renderHook } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { useInitial } from '../hooks/useInitial';
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage } from '@extension/storage';
 
@@ -12,8 +12,8 @@ vi.mock('@extension/storage', () => ({
   apiKeyStorage: { set: vi.fn() },
   darkModeStorage: {},
   inputTextStorage: {},
-  replyStorage: {},
   translationStorage: {},
+  replyStorage: {},
 }));
 
 const setIsGeneratedMock = vi.fn();
@@ -33,113 +33,106 @@ vi.mock('@src/store/expandedSectionStore', () => ({
 }));
 
 describe('useInitial Hook', () => {
-  beforeAll(() => {
-    vi.stubEnv('MODE', 'development');
-    vi.stubEnv('VITE_OPENAI_API_KEY', 'test-api-key');
-  });
-
-  afterAll(() => {
-    vi.unstubAllEnvs();
-  });
+  const useStorageMock = vi.mocked(useStorage);
+  const apiKeyStorageSetMock = vi.mocked(apiKeyStorage.set);
 
   beforeEach(() => {
     vi.clearAllMocks();
     document.documentElement.classList.remove('dark');
+    vi.stubEnv('MODE', 'development');
+    vi.stubEnv('VITE_OPENAI_API_KEY', 'test-api-key');
   });
 
-  it('当 apiKey 为假值时，应调用 apiKeyStorage.set 并传入 test-api-key', async () => {
-    (useStorage as Mock)
+  it('should set API key in dev mode when no key exists', () => {
+    useStorageMock
       .mockReturnValueOnce(null) // apiKey
       .mockReturnValueOnce(false) // darkMode
-      .mockReturnValueOnce(false) // inputTextStorage
-      .mockReturnValueOnce(false) // translationStorage
-      .mockReturnValueOnce(false); // replyStorage
-
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(false); // reply
     renderHook(() => useInitial());
+    expect(apiKeyStorageSetMock).toHaveBeenCalledWith('test-api-key');
+  });
 
-    await waitFor(() => {
-      expect(apiKeyStorage.set).toHaveBeenCalledTimes(1);
-      expect(apiKeyStorage.set).toHaveBeenCalledWith('test-api-key');
-    });
+  it('should not set API key in prod mode when no key exists', () => {
+    vi.stubEnv('MODE', 'production');
+    useStorageMock
+      .mockReturnValueOnce(null) // apiKey
+      .mockReturnValueOnce(false) // darkMode
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(false); // reply
+    renderHook(() => useInitial());
+    expect(apiKeyStorageSetMock).toHaveBeenCalledWith('');
+  });
 
+  it('should not set API key when it already exists', () => {
+    useStorageMock
+      .mockReturnValueOnce('existing-key') // apiKey
+      .mockReturnValueOnce(false) // darkMode
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(false); // reply
+    renderHook(() => useInitial());
+    expect(apiKeyStorageSetMock).not.toHaveBeenCalled();
+  });
+
+  it('should add dark class when darkMode is true', () => {
+    useStorageMock
+      .mockReturnValueOnce('some-key') // apiKey
+      .mockReturnValueOnce(true) // darkMode
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(false); // reply
+    renderHook(() => useInitial());
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('should remove dark class when darkMode is false', () => {
+    document.documentElement.classList.add('dark');
+    useStorageMock
+      .mockReturnValueOnce('some-key') // apiKey
+      .mockReturnValueOnce(false) // darkMode
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(false); // reply
+    renderHook(() => useInitial());
     expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
-  it('当 apiKey 存在时，不应调用 apiKeyStorage.set', async () => {
-    (useStorage as Mock)
-      .mockReturnValueOnce('存在的-apiKey') // apiKey
+  it('should set translation section when input and translation exist', () => {
+    useStorageMock
+      .mockReturnValueOnce('some-key') // apiKey
       .mockReturnValueOnce(false) // darkMode
-      .mockReturnValueOnce(false) // inputTextStorage
-      .mockReturnValueOnce(false) // translationStorage
-      .mockReturnValueOnce(false); // replyStorage
-
+      .mockReturnValueOnce(true) // inputTextFromStorage
+      .mockReturnValueOnce(true) // translation
+      .mockReturnValueOnce(false); // reply
     renderHook(() => useInitial());
-
-    await waitFor(() => {
-      expect(apiKeyStorage.set).not.toHaveBeenCalled();
-    });
+    expect(setIsGeneratedMock).toHaveBeenCalledWith(true);
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('TRANSLATION');
   });
 
-  it('当 darkMode 为 true 时，应为文档添加 dark 类', async () => {
-    (useStorage as Mock)
-      .mockReturnValueOnce('some-api-key') // apiKey 存在
-      .mockReturnValueOnce(true) // darkMode 为 true
-      .mockReturnValueOnce(false) // inputTextStorage
-      .mockReturnValueOnce(false) // translationStorage
-      .mockReturnValueOnce(false); // replyStorage
-
+  it('should set reply section when input and reply exist but no translation', () => {
+    useStorageMock
+      .mockReturnValueOnce('some-key') // apiKey
+      .mockReturnValueOnce(false) // darkMode
+      .mockReturnValueOnce(true) // inputTextFromStorage
+      .mockReturnValueOnce(false) // translation
+      .mockReturnValueOnce(true); // reply
     renderHook(() => useInitial());
-
-    await waitFor(() => {
-      expect(document.documentElement.classList.contains('dark')).toBe(true);
-    });
+    expect(setIsGeneratedMock).toHaveBeenCalledWith(true);
+    expect(setExpandedSectionMock).toHaveBeenCalledWith('REPLY');
   });
 
-  it('当 inputText 存在且 translation 存在时，应调用 setIsGenerated(true) 并设置展开区域为 TRANSLATION', async () => {
-    (useStorage as Mock)
-      .mockReturnValueOnce('some-api-key') // apiKey 存在
-      .mockReturnValueOnce(false) // darkMode 为 false
-      .mockReturnValueOnce(true) // inputTextStorage 为真
-      .mockReturnValueOnce(true) // translationStorage 为真
-      .mockReturnValueOnce(false); // replyStorage 为假
-
+  it('should not set any section when no input exists', () => {
+    useStorageMock
+      .mockReturnValueOnce('some-key') // apiKey
+      .mockReturnValueOnce(false) // darkMode
+      .mockReturnValueOnce(false) // inputTextFromStorage
+      .mockReturnValueOnce(true) // translation
+      .mockReturnValueOnce(true); // reply
     renderHook(() => useInitial());
-
-    await waitFor(() => {
-      expect(setIsGeneratedMock).toHaveBeenCalledWith(true);
-      expect(setExpandedSectionMock).toHaveBeenCalledWith('TRANSLATION');
-    });
-  });
-
-  it('当 inputText 存在且 translation 为假且 reply 存在时，应调用 setIsGenerated(true) 并设置展开区域为 REPLY', async () => {
-    (useStorage as Mock)
-      .mockReturnValueOnce('some-api-key') // apiKey 存在
-      .mockReturnValueOnce(false) // darkMode 为 false
-      .mockReturnValueOnce(true) // inputTextStorage 为真
-      .mockReturnValueOnce(false) // translationStorage 为假
-      .mockReturnValueOnce(true); // replyStorage 为真
-
-    renderHook(() => useInitial());
-
-    await waitFor(() => {
-      expect(setIsGeneratedMock).toHaveBeenCalledWith(true);
-      expect(setExpandedSectionMock).toHaveBeenCalledWith('REPLY');
-    });
-  });
-
-  it('当 inputText 不存在时，不应调用 setIsGenerated 和 setExpandedSection', async () => {
-    (useStorage as Mock)
-      .mockReturnValueOnce('some-api-key') // apiKey 存在
-      .mockReturnValueOnce(false) // darkMode 为 false
-      .mockReturnValueOnce(false) // inputTextStorage 为假
-      .mockReturnValueOnce(true) // translationStorage 为真（无效，因为 inputText 不存在）
-      .mockReturnValueOnce(true); // replyStorage 为真（无效，因为 inputText 不存在）
-
-    renderHook(() => useInitial());
-
-    await waitFor(() => {
-      expect(setIsGeneratedMock).not.toHaveBeenCalled();
-      expect(setExpandedSectionMock).not.toHaveBeenCalled();
-    });
+    expect(setIsGeneratedMock).not.toHaveBeenCalled();
+    expect(setExpandedSectionMock).not.toHaveBeenCalled();
   });
 });

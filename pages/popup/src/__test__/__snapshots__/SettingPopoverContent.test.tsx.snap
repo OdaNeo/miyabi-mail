@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is empty 1`] = `
-<DocumentFragment>
+exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状态 1`] = `
+<div>
   <div
     class="space-y-2"
   >
@@ -25,6 +25,7 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       >
         <button
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-8 w-8 text-slate-500 hover:text-slate-900"
+          data-testid="eye-icon"
         >
           <svg
             class="lucide lucide-eye h-4 w-4"
@@ -86,7 +87,7 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
     </div>
     <button
       aria-autocomplete="none"
-      aria-controls="radix-:r1:"
+      aria-controls="radix-:r6:"
       aria-expanded="false"
       class="flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
       data-state="closed"
@@ -97,7 +98,7 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       <span
         style="pointer-events: none;"
       >
-        GPT-4o-mini
+        GPT-4o
       </span>
       <svg
         aria-hidden="true"
@@ -128,6 +129,7 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       </button>
       <button
         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 w-9"
+        data-testid="delete-api-icon"
       >
         <svg
           class="lucide lucide-trash2 h-4 w-4"
@@ -166,11 +168,11 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       </button>
     </div>
   </div>
-</DocumentFragment>
+</div>
 `;
 
-exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is provided 1`] = `
-<DocumentFragment>
+exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的状态 1`] = `
+<div>
   <div
     class="space-y-2"
   >
@@ -180,6 +182,33 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       API Key Setting
     </h3>
     <div
+      class="text-red-500 flex items-center text-xs"
+    >
+      <svg
+        class="lucide lucide-triangle-alert h-3 w-3 mr-1"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+        />
+        <path
+          d="M12 9v4"
+        />
+        <path
+          d="M12 17h.01"
+        />
+      </svg>
+      Please set API key
+    </div>
+    <div
       class="relative"
     >
       <input
@@ -187,13 +216,14 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
         placeholder="OpenAI API Key"
         readonly=""
         type="password"
-        value="test-api-key"
+        value=""
       />
       <div
         class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1"
       >
         <button
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-8 w-8 text-slate-500 hover:text-slate-900"
+          data-testid="eye-icon"
         >
           <svg
             class="lucide lucide-eye h-4 w-4"
@@ -217,45 +247,11 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
             />
           </svg>
         </button>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-6 w-6 text-slate-500 hover:text-slate-900 relative"
-          data-testid="copy-icon-group"
-        >
-          <div
-            class="absolute inset-0 flex items-center justify-center"
-            style="opacity: 1; transform: none;"
-          >
-            <svg
-              class="lucide lucide-copy h-4 w-4"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                height="14"
-                rx="2"
-                ry="2"
-                width="14"
-                x="8"
-                y="8"
-              />
-              <path
-                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-              />
-            </svg>
-          </div>
-        </button>
       </div>
     </div>
     <button
       aria-autocomplete="none"
-      aria-controls="radix-:r7:"
+      aria-controls="radix-:r0:"
       aria-expanded="false"
       class="flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
       data-state="closed"
@@ -266,7 +262,7 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       <span
         style="pointer-events: none;"
       >
-        GPT-4o-mini
+        GPT-4o
       </span>
       <svg
         aria-hidden="true"
@@ -292,48 +288,11 @@ exports[`SettingPopoverContent Snapshot Tests > matches snapshot when API key is
       <button
         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
         data-testid="save-icon"
+        disabled=""
       >
         Save
       </button>
-      <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 w-9"
-      >
-        <svg
-          class="lucide lucide-trash2 h-4 w-4"
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M3 6h18"
-          />
-          <path
-            d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
-          />
-          <path
-            d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
-          />
-          <line
-            x1="10"
-            x2="10"
-            y1="11"
-            y2="17"
-          />
-          <line
-            x1="14"
-            x2="14"
-            y1="11"
-            y2="17"
-          />
-        </svg>
-      </button>
     </div>
   </div>
-</DocumentFragment>
+</div>
 `;

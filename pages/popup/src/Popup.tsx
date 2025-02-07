@@ -267,6 +267,7 @@ export const Popup = () => {
             <Switch
               disabled={isLoading}
               id="auto-subject"
+              data-testid="auto-subject-toggle"
               checked={autoSubject}
               onCheckedChange={handleSetAutoSubject}
             />
@@ -277,7 +278,7 @@ export const Popup = () => {
           <div className="flex-1"></div>
           <Button
             onClick={handlePolishing}
-            disabled={isLoading || !inputText.trim()}
+            disabled={isLoading || !inputText?.trim()}
             className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-slate-200 hover:bg-slate-300 text-slate-900
             dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
@@ -293,7 +294,7 @@ export const Popup = () => {
           </Button>
           <Button
             onClick={handleTranslation}
-            disabled={isLoading || !inputText.trim()}
+            disabled={isLoading || !inputText?.trim()}
             className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-slate-200 hover:bg-slate-300 text-slate-900
             dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
@@ -309,7 +310,7 @@ export const Popup = () => {
           </Button>
           <Button
             onClick={handleReply}
-            disabled={isLoading || !inputText.trim()}
+            disabled={isLoading || !inputText?.trim()}
             className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-emerald-500 hover:bg-emerald-600 text-white
             dark:bg-emerald-600 dark:hover:bg-emerald-700"
@@ -328,6 +329,7 @@ export const Popup = () => {
           <Input
             placeholder={INPUT_SUBJECT}
             value={subject}
+            data-testid="subject-input"
             disabled={isLoading}
             onChange={handleSetSubject}
             className="text-xs dark:bg-slate-800 

@@ -27,15 +27,10 @@ export function Reply() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard
-      .writeText(reply)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
+    navigator.clipboard.writeText(reply).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   return (
@@ -68,6 +63,7 @@ export function Reply() {
                     <Button
                       variant="outline"
                       size="sm"
+                      data-testid="copy-button"
                       onClick={e => {
                         e.stopPropagation();
                         handleCopy();

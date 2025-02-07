@@ -1,20 +1,16 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SettingPopoverContent } from '../components/SettingPopoverContent';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useStorage } from '@extension/shared';
+import { apiKeyStorage } from '@extension/storage';
 
 vi.mock('@extension/shared', () => ({
-  useStorage: (storage: any) => storage.get(),
+  useStorage: vi.fn(),
 }));
 
 vi.mock('@extension/storage', () => ({
-  apiKeyStorage: {
-    get: () => '',
-    set: vi.fn(),
-  },
-  apiVersionStorage: {
-    get: () => 'gpt-4o-mini',
-    set: vi.fn(),
-  },
+  apiKeyStorage: { set: vi.fn() },
+  apiVersionStorage: { set: vi.fn() },
 }));
 
 vi.mock('@src/hooks/useI18n', () => ({
@@ -25,62 +21,102 @@ vi.mock('@src/hooks/useI18n', () => ({
   }),
 }));
 
-describe('SettingPopoverContent Snapshot Tests', () => {
+const mockClipboard = {
+  writeText: vi.fn().mockResolvedValue(undefined),
+};
+
+Object.assign(navigator, { clipboard: mockClipboard });
+
+describe('SettingPopoverContent Component', () => {
+  const mockSetIsOpen = vi.fn();
+  const useStorageMock = vi.mocked(useStorage);
+  const apiKeyStorageMock = vi.mocked(apiKeyStorage);
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('matches snapshot when API key is empty', () => {
-    const setIsOpen = vi.fn();
-    const { asFragment } = render(<SettingPopoverContent setIsOpen={setIsOpen} />);
-
-    expect(asFragment()).toMatchSnapshot();
+  it('应该正确渲染没有 API key 的状态', () => {
+    useStorageMock // 这个顺序与代码中的调用顺序有关
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce(''); // apiKey;
+    const { container } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    expect(container).toMatchSnapshot();
   });
 
-  it('matches snapshot when API key is provided', async () => {
-    vi.mock('@extension/storage', () => ({
-      apiKeyStorage: {
-        get: () => 'test-api-key',
-        set: vi.fn(),
-      },
-      apiVersionStorage: {
-        get: () => 'gpt-4o-mini',
-        set: vi.fn(),
-      },
-    }));
-
-    const setIsOpen = vi.fn();
-    const { asFragment } = render(<SettingPopoverContent setIsOpen={setIsOpen} />);
-    expect(asFragment()).toMatchSnapshot();
+  it('应该正确渲染有 API key 的状态', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey;
+    const { container } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    expect(container).toMatchSnapshot();
   });
 
-  it('should copy API key to clipboard when the copy button is clicked', async () => {
-    const writeTextMock = vi.fn();
-    Object.assign(navigator, {
-      clipboard: {
-        writeText: writeTextMock,
+  it('should copy API key to clipboard when copy button is clicked', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey;
+    render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    fireEvent.click(screen.getByTestId('copy-icon-group'));
+    expect(mockClipboard.writeText).toHaveBeenCalledWith('test-api-key');
+  });
+
+  it('should delete API key when delete button is clicked', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey;
+    render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    fireEvent.click(screen.getByTestId('delete-api-icon'));
+    expect(apiKeyStorageMock.set).toHaveBeenCalledWith('');
+  });
+
+  it('应该在粘贴时正确设置 API key', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce(''); // apiKey
+    const { getByPlaceholderText } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    const input = getByPlaceholderText('OpenAI API Key');
+    fireEvent.paste(input, {
+      clipboardData: {
+        getData: () => 'test-pasted-api-key',
       },
     });
+    expect(apiKeyStorageMock.set).toHaveBeenCalledTimes(1);
+    expect(apiKeyStorageMock.set).toHaveBeenCalledWith('test-pasted-api-key');
+  });
 
-    vi.mock('@extension/storage', () => ({
-      apiKeyStorage: {
-        get: () => 'test-api-key',
-        set: vi.fn(),
-      },
-      apiVersionStorage: {
-        get: () => 'gpt-4o-mini',
-        set: vi.fn(),
-      },
-    }));
+  it('should close popover when close button is clicked', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey;
+    render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    fireEvent.click(screen.getByTestId('save-icon'));
+    expect(mockSetIsOpen).toHaveBeenCalledWith(false);
+  });
 
-    const setIsOpen = vi.fn();
-    render(<SettingPopoverContent setIsOpen={setIsOpen} />);
+  it('should select input when click', () => {
+    const mockSelect = vi.fn();
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey;
+    const { getByPlaceholderText } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    const input = getByPlaceholderText('OpenAI API Key');
+    (input as any).select = mockSelect;
+    fireEvent.click(input);
+    expect(mockSelect).toHaveBeenCalledTimes(1);
+  });
 
-    await waitFor(() => {
-      const copyButton = screen.getByTestId('copy-icon-group');
-      fireEvent.click(copyButton);
-    });
-
-    expect(writeTextMock).toHaveBeenCalledWith('test-api-key');
+  it('should toggle password visibility when eye icon is clicked', () => {
+    useStorageMock
+      .mockReturnValueOnce('gpt-4o') // apiVersion
+      .mockReturnValueOnce('test-api-key'); // apiKey
+    const { getByPlaceholderText, getByTestId } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    const input = getByPlaceholderText('OpenAI API Key');
+    const eyeButton = getByTestId('eye-icon');
+    expect(input).toHaveAttribute('type', 'password');
+    fireEvent.click(eyeButton);
+    expect(input).toHaveAttribute('type', 'text');
+    fireEvent.click(eyeButton);
+    expect(input).toHaveAttribute('type', 'password');
   });
 });

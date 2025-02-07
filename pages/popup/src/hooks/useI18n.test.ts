@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useI18n } from './useI18n';
+import { useStorage } from '@extension/shared';
 
 const mockCnTranslations = {
   hello: '你好',
@@ -12,17 +13,8 @@ const mockEnTranslations = {
   world: 'World',
 };
 
-const createMockStorageValue = (lang: string) => ({
-  value: lang,
-  setValue: vi.fn(),
-  remove: vi.fn(),
-  key: 'i18n',
-});
-
-const mockStorageValue = createMockStorageValue('cn');
-
 vi.mock('@extension/shared', () => ({
-  useStorage: () => mockStorageValue,
+  useStorage: vi.fn(),
 }));
 
 vi.mock('../i18n/cn.json', () => ({
@@ -34,40 +26,44 @@ vi.mock('../i18n/en.json', () => ({
 }));
 
 describe('useI18n', () => {
+  const useStorageMock = vi.mocked(useStorage);
+
   beforeEach(() => {
     vi.clearAllMocks();
-    mockStorageValue.value = 'cn';
   });
 
-  it('should load Chinese translations by default', async () => {
+  it('should load translations based on language', async () => {
+    useStorageMock.mockReturnValue({ value: 'en' });
     const { result } = renderHook(() => useI18n());
-
-    await waitFor(() => {
-      expect(result.current).toEqual(mockCnTranslations);
-    });
-  });
-
-  it('should load English translations when language is set to en', async () => {
-    mockStorageValue.value = 'en';
-
-    const { result } = renderHook(() => useI18n());
-
     await waitFor(() => {
       expect(result.current).toEqual(mockEnTranslations);
     });
   });
 
-  it('should fallback to Chinese when translation file not found', async () => {
-    mockStorageValue.value = 'invalid-lang';
-
-    vi.mock('../i18n/invalid-lang.json', () => {
-      throw new Error('File not found');
-    });
-
+  it('should fallback to Chinese when language file fails to load', async () => {
+    useStorageMock.mockReturnValue({ value: 'invalid' });
     const { result } = renderHook(() => useI18n());
-
     await waitFor(() => {
       expect(result.current).toEqual(mockCnTranslations);
     });
+  });
+
+  it('should update translations when language changes', async () => {
+    useStorageMock.mockReturnValue({ value: 'en' });
+    const { result, rerender } = renderHook(() => useI18n());
+    await waitFor(() => {
+      expect(result.current).toEqual(mockEnTranslations);
+    });
+    useStorageMock.mockReturnValue({ value: 'cn' });
+    rerender();
+    await waitFor(() => {
+      expect(result.current).toEqual(mockCnTranslations);
+    });
+  });
+
+  it('should start with empty translations object', () => {
+    useStorageMock.mockReturnValue({ value: 'en' });
+    const { result } = renderHook(() => useI18n());
+    expect(result.current).toEqual({});
   });
 });

@@ -1,19 +1,32 @@
-import { describe, test, expect, beforeEach } from 'vitest';
-import { createRoot } from 'react-dom/client';
-import Popup from '@src/Popup';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-describe('Popup 渲染测试', () => {
-  let container: HTMLElement;
+vi.mock('@src/Popup', () => ({
+  default: () => <div data-testid="popup">Mock Popup Component</div>,
+}));
 
+vi.mock('@src/index.css', () => ({}));
+
+describe('Popup initialization', () => {
   beforeEach(() => {
-    document.body.innerHTML = '<div id="app-container"></div>';
-    container = document.querySelector('#app-container')!;
+    document.body.innerHTML = '';
+    vi.resetModules();
+    vi.clearAllMocks();
   });
 
-  test('Popup 组件应该正确渲染', () => {
-    const root = createRoot(container);
-    root.render(<Popup />);
-
+  it('should render Popup correctly', async () => {
+    document.body.innerHTML = '<div id="app-container"></div>';
+    const { init } = await import('../index');
+    init();
+    const container = document.querySelector('#app-container');
     expect(container).toMatchSnapshot();
+  });
+
+  it('should throw error when container is missing', async () => {
+    try {
+      await import('../index');
+      throw new Error('Expected error was not thrown');
+    } catch (error: any) {
+      expect(error.message).toContain('Can not find #app-container');
+    }
   });
 });

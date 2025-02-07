@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Popup 渲染测试 > Popup 组件应该正确渲染 1`] = `
+exports[`Popup initialization > should render Popup correctly 1`] = `
 <div
   id="app-container"
 />
