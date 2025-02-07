@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@src/components/ui/tooltip';
 import { Button } from '@src/components/ui/button';
-import { Settings, Sun, Moon, AlertTriangle, EyeOff, Eye, Copy, Trash2, Check, Globe } from 'lucide-react';
+import { Settings, Sun, Moon, AlertTriangle, EyeOff, Eye, Trash2, Globe } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/popover';
 import { useRef, useState } from 'react';
 import { Input } from '@src/components/ui/input';
@@ -9,16 +9,14 @@ import { useStorage } from '@extension/shared';
 import { apiKeyStorage, apiVersionStorage, darkModeStorage, i18nStorage } from '@extension/storage';
 import type React from 'react';
 import { useOpenStore } from '@src/store/openStore';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@src/hooks/useI18n';
+import { CopyButton } from './CopyButton';
 
 export function Header() {
   const darkMode = useStorage(darkModeStorage);
   const apiKey = useStorage(apiKeyStorage);
 
   const { isOpen, setIsOpen } = useOpenStore();
-
-  const [isCopied, setIsCopied] = useState(false);
 
   const [showKey, setShowKey] = useState(false);
 
@@ -59,12 +57,7 @@ export function Header() {
   };
 
   const handleCopyKey = () => {
-    if (isCopied) {
-      return;
-    }
     navigator.clipboard.writeText(apiKey);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
   };
 
   const handleDelete = () => {
@@ -84,7 +77,7 @@ export function Header() {
                 className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                 onClick={handleSwitchLanguage}
               >
-                <Globe className="h-3 w-3" />
+                <Globe data-testid="globe-icon" className="h-3 w-3" />
               </Button>
             </TooltipTrigger>
             <TooltipContent className="bg-slate-700 text-slate-100 dark:bg-slate-200 dark:text-slate-800">
@@ -149,40 +142,7 @@ export function Header() {
                   >
                     {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
-                  {apiKey && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-slate-500 hover:text-slate-900 relative"
-                      onClick={handleCopyKey}
-                    >
-                      <AnimatePresence initial={false} mode="wait">
-                        {isCopied ? (
-                          <motion.div
-                            key="check"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute inset-0 flex items-center justify-center"
-                          >
-                            <Check className="h-4 w-4 text-green-500" />
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="copy"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute inset-0 flex items-center justify-center"
-                          >
-                            <Copy className="h-4 w-4" />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </Button>
-                  )}
+                  {apiKey && <CopyButton handleCopyText={handleCopyKey} />}
                 </div>
               </div>
               <Select value={apiVersion} onValueChange={apiVersionStorage.set}>

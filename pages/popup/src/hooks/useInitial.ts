@@ -4,8 +4,6 @@ import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
 import { useGeneratedStore } from '@src/store/generatedStore';
 import { useEffect } from 'react';
 
-const isDev = import.meta.env.MODE === 'development';
-
 export const useInitial = () => {
   const apiKey = useStorage(apiKeyStorage);
   const darkMode = useStorage(darkModeStorage);
@@ -15,6 +13,8 @@ export const useInitial = () => {
 
   const { setIsGenerated } = useGeneratedStore();
   const { setExpandedSection } = useExpandedSectionStore();
+
+  const isDev = import.meta.env.MODE === 'development';
 
   useEffect(() => {
     if (!apiKey) {

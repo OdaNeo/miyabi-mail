@@ -28,8 +28,9 @@ import { useGeneratedStore } from './store/generatedStore';
 import { useExpandedSectionStore } from './store/expandedSectionStore';
 import { useInitial } from './hooks/useInitial';
 import { useI18n } from './hooks/useI18n';
+import { CopyButton } from './components/CopyButton';
 
-const Popup = () => {
+export const Popup = () => {
   const apiKey = useStorage(apiKeyStorage);
   const inputTextFromStorage = useStorage(inputTextStorage);
   const apiVersion = useStorage(apiVersionStorage);
@@ -201,6 +202,10 @@ const Popup = () => {
     }
   };
 
+  const handleCopyText = () => {
+    navigator.clipboard.writeText(inputText);
+  };
+
   return (
     <div
       className="w-[500px] h-[400px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
@@ -235,14 +240,15 @@ const Popup = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="absolute top-2 right-2 flex"
               >
+                <CopyButton handleCopyText={handleCopyText} />
                 <Button
                   disabled={isLoading}
                   variant="ghost"
                   size="icon"
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   onClick={handleInputTextClear}
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-6 w-6" />
                 </Button>
               </motion.div>
             )}

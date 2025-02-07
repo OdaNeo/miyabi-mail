@@ -25,7 +25,6 @@ export function detectLanguage(text: string): Language | unknown {
   const maxRatio = Math.max(cnRatio, jpRatio, enRatio);
   if (maxRatio === cnRatio) return Language.CN;
   if (maxRatio === jpRatio) return Language.JP;
-  if (maxRatio === enRatio) return Language.EN;
 
-  return 'unknown';
+  return Language.EN;
 }

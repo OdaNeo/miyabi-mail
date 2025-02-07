@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CopyButton > should match snapshot in copied state 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-6 w-6 text-slate-500 hover:text-slate-900 relative"
+  >
+    <div
+      animate="[object Object]"
+      class="absolute inset-0 flex items-center justify-center"
+      exit="[object Object]"
+      initial="[object Object]"
+      transition="[object Object]"
+    >
+      <div
+        data-testid="check-icon"
+      >
+        Check
+      </div>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`CopyButton > should match snapshot in initial state 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-6 w-6 text-slate-500 hover:text-slate-900 relative"
+  >
+    <div
+      animate="[object Object]"
+      class="absolute inset-0 flex items-center justify-center"
+      exit="[object Object]"
+      initial="[object Object]"
+      transition="[object Object]"
+    >
+      <div
+        data-testid="copy-icon"
+      >
+        Copy
+      </div>
+    </div>
+  </button>
+</div>
+`;

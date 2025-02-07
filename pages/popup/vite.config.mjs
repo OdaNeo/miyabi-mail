@@ -1,3 +1,6 @@
+/// <reference types="vitest" />
+/// <reference types="vitest/config" />
+
 import { resolve } from 'node:path';
 import { withPageConfig } from '@extension/vite-config';
 
@@ -24,6 +27,9 @@ export default withPageConfig({
     },
   },
   test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./setup-vitest.ts'],
     coverage: {
       exclude: ['**/src/components/ui/**'],
       include: ['**/src/**'],

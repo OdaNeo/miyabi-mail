@@ -45,7 +45,7 @@ export function Reply() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="space-y-2 overflow-hidden"
+          className="space-y-2 overflow-y-auto scrollbar-custom"
         >
           {(['TRANSLATION', 'REPLY'] as PROMPT_KEYS[]).map(section => (
             <div key={section} className="space-y-1">

@@ -8,5 +8,5 @@
     },
     "types": ["chrome", "../../vite-env.d.ts"]
   },
-  "include": ["src"]
+  "include": ["src", "setup-vitest.ts"]
 }
