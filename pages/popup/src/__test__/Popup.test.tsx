@@ -1,11 +1,41 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Popup } from '../Popup';
+import { inputTextStorage } from '@extension/storage';
+
+const mockStorageValues = new Map([[inputTextStorage, '']]);
 
 vi.mock('@extension/shared', () => ({
-  useStorage: () => vi.fn(),
+  useStorage: (storage: any) => mockStorageValues.get(storage) || '',
   withErrorBoundary: (component: any) => component,
   withSuspense: (component: any) => component,
+}));
+
+vi.mock('@extension/storage', () => ({
+  apiKeyStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
+  inputTextStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
+  translationStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
+  replyStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
+  apiVersionStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
+  darkModeStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
 }));
 
 vi.mock('@src/hooks/useI18n', () => ({
@@ -49,6 +79,13 @@ vi.mock('@src/store/expandedSectionStore', () => ({
   }),
 }));
 
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  },
+  AnimatePresence: ({ children }: any) => <>{children}</>,
+}));
+
 const mockClipboard = {
   writeText: vi.fn(() => Promise.resolve()),
 };
@@ -69,5 +106,20 @@ describe('Popup Component', () => {
     const toggle = getByTestId('auto-subject-toggle');
     fireEvent.click(toggle);
     expect(container).toMatchSnapshot();
+  });
+
+  it('should copy inputText to clipboard when copy button is clicked', async () => {
+    mockStorageValues.set(inputTextStorage, 'test input text');
+    render(<Popup />);
+    const copyButton = screen.getByTestId('copy-icon-group');
+    fireEvent.click(copyButton);
+    expect(mockClipboard.writeText).toHaveBeenCalledWith('test input text');
+  });
+
+  it('should not show copy button when inputText is empty', () => {
+    mockStorageValues.set(inputTextStorage, '');
+    render(<Popup />);
+    const copyButton = screen.queryByTestId('copy-icon-group');
+    expect(copyButton).not.toBeInTheDocument();
   });
 });

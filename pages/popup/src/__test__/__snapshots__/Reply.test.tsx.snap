@@ -3,8 +3,10 @@
 exports[`Reply Component > should render correctly when generated 1`] = `
 <div>
   <div
+    animate="[object Object]"
     class="space-y-2 overflow-y-auto scrollbar-custom"
-    style="opacity: 0; height: 0px;"
+    exit="[object Object]"
+    initial="[object Object]"
   >
     <div
       class="space-y-1"

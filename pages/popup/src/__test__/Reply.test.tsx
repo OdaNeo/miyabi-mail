@@ -4,6 +4,13 @@ import { Reply } from '../components/Reply';
 import { useStorage } from '@extension/shared';
 import type { PROMPT_KEYS } from '@src/utils/tts';
 
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  },
+  AnimatePresence: ({ children }: any) => <>{children}</>,
+}));
+
 vi.mock('@extension/shared', () => ({
   useStorage: vi.fn(),
 }));
@@ -50,6 +57,7 @@ describe('Reply Component', () => {
   });
 
   afterEach(() => {
+    vi.runOnlyPendingTimers();
     vi.useRealTimers();
   });
 
@@ -104,5 +112,14 @@ describe('Reply Component', () => {
     const copyButton = screen.getByTestId('copy-button');
     fireEvent.click(copyButton);
     expect(mockClipboard.writeText).toHaveBeenCalledWith('Reply text');
+  });
+
+  it('should not show copy button when reply section is not expanded', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
+    mockExpandedSection = 'REPLY';
+    render(<Reply />);
+    expect(screen.queryByTestId('copy-button')).toBeInTheDocument();
   });
 });
