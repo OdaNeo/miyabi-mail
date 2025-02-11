@@ -1,0 +1,64 @@
+import { useStorage } from '@extension/shared';
+import { apiKeyStorage, apiVersionStorage } from '@extension/storage';
+import { useOpenStore } from '@src/store/openStore';
+import OpenAI, { APIConnectionError, APIError, RateLimitError } from 'openai';
+import { useCallback, useState } from 'react';
+
+export const useOpenAIAction = (inputText: string) => {
+  const { setIsOpen } = useOpenStore();
+
+  const apiKey = useStorage(apiKeyStorage);
+  const apiVersion = useStorage(apiVersionStorage);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const runOpenAIAction = useCallback(
+    async ({
+      prompt,
+      onStart,
+      onFinish,
+      onSuccess,
+    }: {
+      prompt: string;
+      onStart?: () => void;
+      onFinish?: () => void;
+      onSuccess?: (content: string) => void;
+    }) => {
+      if (!apiKey) {
+        setIsOpen(true);
+        return;
+      }
+      if (!inputText) {
+        return;
+      }
+      setErrorMsg('');
+      try {
+        onStart?.();
+        const client = new OpenAI({
+          apiKey,
+          dangerouslyAllowBrowser: true,
+        });
+        const resp = await client.chat.completions.create({
+          messages: [{ role: 'user', content: prompt }],
+          model: apiVersion,
+          temperature: 0.7,
+        });
+        onSuccess?.(resp.choices[0]?.message?.content || '');
+      } catch (e: unknown) {
+        if (e instanceof APIConnectionError) {
+          setErrorMsg('Failed to connect to OpenAI API: ' + e.message);
+        } else if (e instanceof RateLimitError) {
+          setErrorMsg('OpenAI API request exceeded rate limit: ' + e.message);
+        } else if (e instanceof APIError) {
+          setErrorMsg('OpenAI API returned an API Error: ' + e.message);
+        } else {
+          setErrorMsg('An unknown error occurred:' + e);
+        }
+      } finally {
+        onFinish?.();
+      }
+    },
+    [apiKey, inputText, apiVersion],
+  );
+
+  return [errorMsg, setErrorMsg, runOpenAIAction] as const;
+};

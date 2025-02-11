@@ -1,14 +1,7 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
-import {
-  apiKeyStorage,
-  apiVersionStorage,
-  inputTextStorage,
-  replyStorage,
-  translationStorage,
-} from '@extension/storage';
-import { useCallback, useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
-import OpenAI, { APIConnectionError, APIError, RateLimitError } from 'openai';
+import { inputTextStorage, replyStorage, translationStorage } from '@extension/storage';
+import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import { rolePrompt } from './utils/tts';
 import { useStorage } from '@extension/shared';
 import { Reply } from '@src/components/Reply';
@@ -23,22 +16,19 @@ import { Label } from './components/ui/label';
 import { Progress } from './components/ui/progress';
 import { Input } from './components/ui/input';
 import { useProgress } from './hooks/useProgress';
-import { useOpenStore } from './store/openStore';
 import { useGeneratedStore } from './store/generatedStore';
 import { useExpandedSectionStore } from './store/expandedSectionStore';
 import { useInitial } from './hooks/useInitial';
 import { useI18n } from './hooks/useI18n';
 import { CopyButton } from './components/CopyButton';
+import { useOpenAIAction } from './hooks/useOpenAIAction';
 
 export const Popup = () => {
-  const apiKey = useStorage(apiKeyStorage);
   const inputTextFromStorage = useStorage(inputTextStorage);
-  const apiVersion = useStorage(apiVersionStorage);
 
   const [subject, setSubject] = useState('');
   const [inputText, setInputText] = useState(inputTextFromStorage);
 
-  const { setIsOpen } = useOpenStore();
   const { setIsGenerated } = useGeneratedStore();
 
   const [isEmailContent, setIsEmailContent] = useState(true);
@@ -54,11 +44,11 @@ export const Popup = () => {
   const [translationProgress, setTranslationProgress] = useProgress(isTranslationLoading);
   const [polishingProgress, setPolishingProgress] = useProgress(isPolishingLoading);
 
-  const [errorMsg, setErrorMsg] = useState('');
-
   const { setExpandedSection } = useExpandedSectionStore();
 
   useInitial();
+
+  const [errorMsg, setErrorMsg, runOpenAIAction] = useOpenAIAction(inputText);
 
   const {
     INPUT_PLACEHOLDER,
@@ -77,61 +67,11 @@ export const Popup = () => {
     inputTextStorage.set(inputText);
   }, [inputText]);
 
-  const runOpenAIAction = useCallback(
-    async ({
-      prompt,
-      onStart,
-      onFinish,
-      onSuccess,
-    }: {
-      prompt: string;
-      onStart?: () => void;
-      onFinish?: () => void;
-      onSuccess?: (content: string) => void;
-    }) => {
-      if (!apiKey) {
-        setIsOpen(true);
-        return;
-      }
-      if (!inputText) {
-        return;
-      }
-      setIsGenerated(false);
-      setErrorMsg('');
-      try {
-        onStart?.();
-        const client = new OpenAI({
-          apiKey,
-          dangerouslyAllowBrowser: true,
-        });
-        const resp = await client.chat.completions.create({
-          messages: [{ role: 'user', content: prompt }],
-          model: apiVersion,
-          temperature: 0.7,
-        });
-        onSuccess?.(resp.choices[0]?.message?.content || '');
-      } catch (e: unknown) {
-        if (e instanceof APIConnectionError) {
-          setErrorMsg('Failed to connect to OpenAI API: ' + e.message);
-        } else if (e instanceof RateLimitError) {
-          setErrorMsg('OpenAI API request exceeded rate limit: ' + e.message);
-        } else if (e instanceof APIError) {
-          setErrorMsg('OpenAI API returned an API Error: ' + e.message);
-        } else {
-          setErrorMsg('An unknown error occurred:' + e);
-        }
-      } finally {
-        onFinish?.();
-      }
-    },
-    [apiKey, inputText, apiVersion],
-  );
-
   const handleReply = () => {
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'REPLY', subject?.trim()),
       onStart: () => {
-        setIsReplyLoading(true), setReplyProgress(0);
+        setIsGenerated(false), setIsReplyLoading(true), setReplyProgress(0);
       },
       onFinish: () => {
         setIsReplyLoading(false), setReplyProgress(0);
@@ -146,7 +86,7 @@ export const Popup = () => {
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'TRANSLATION'),
       onStart: () => {
-        setIsTranslationLoading(true), setTranslationProgress(0);
+        setIsGenerated(false), setIsTranslationLoading(true), setTranslationProgress(0);
       },
       onFinish: () => {
         setIsTranslationLoading(false), setTranslationProgress(0);
@@ -161,7 +101,7 @@ export const Popup = () => {
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'POLISHING'),
       onStart: () => {
-        setIsPolishingLoading(true), setPolishingProgress(0);
+        setIsGenerated(false), setIsPolishingLoading(true), setPolishingProgress(0);
       },
       onFinish: () => {
         setIsPolishingLoading(false), setPolishingProgress(0);
