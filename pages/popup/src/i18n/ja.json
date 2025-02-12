@@ -19,5 +19,9 @@
   "API_KEY_SETTING": "OPENAI APIキーを設定",
   "PLEASE_SET_API_KEY": "APIキーを設定してください",
   "SAVE": "保存",
-  "CHANGE_LANGUAGE": "言語を切り替え"
+  "CHANGE_LANGUAGE": "言語を切り替え",
+  "PRECISE": "精密",
+  "CREATIVE": "高創造性",
+  "TEMPERATURE": "創造性レベル",
+  "BALANCE": "バランス"
 }

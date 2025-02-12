@@ -19,5 +19,9 @@
   "API_KEY_SETTING": "Set OPENAI API Key",
   "PLEASE_SET_API_KEY": "Please set the API key",
   "SAVE": "Save",
-  "CHANGE_LANGUAGE": "Switch Language"
+  "CHANGE_LANGUAGE": "Switch Language",
+  "PRECISE": "Precise",
+  "CREATIVE": "Highly Creative",
+  "TEMPERATURE": "Creativity Level",
+  "BALANCE": "Balanced"
 }

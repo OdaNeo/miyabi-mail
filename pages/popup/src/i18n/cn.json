@@ -19,5 +19,9 @@
   "API_KEY_SETTING": "设定 OPENAI API 密钥",
   "PLEASE_SET_API_KEY": "请设置 API 密钥",
   "SAVE": "保存",
-  "CHANGE_LANGUAGE": "切换语言"
+  "CHANGE_LANGUAGE": "切换语言",
+  "PRECISE": "精准",
+  "CREATIVE": "高创意",
+  "TEMPERATURE": "创意度",
+  "BALANCE": "平衡"
 }

@@ -1,23 +1,32 @@
 import { Button } from '@src/components/ui/button';
+import { Slider } from '@src/components/ui/slider';
 import { AlertTriangle, EyeOff, Eye, Trash2 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Input } from '@src/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useStorage } from '@extension/shared';
-import { apiKeyStorage, apiVersionStorage } from '@extension/storage';
+import { apiKeyStorage, apiVersionStorage, temperatureStorage } from '@extension/storage';
 import type React from 'react';
 import { useI18n } from '@src/hooks/useI18n';
 import { CopyButton } from './CopyButton';
+import { motion } from 'framer-motion';
 
 export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   const [showKey, setShowKey] = useState(false);
 
   const apiVersion = useStorage(apiVersionStorage);
   const apiKey = useStorage(apiKeyStorage);
+  const temperatureFromStorage = useStorage(temperatureStorage);
+
+  const [temperature, setTemperature] = useState(temperatureFromStorage);
+
+  useEffect(() => {
+    temperatureStorage.set(temperature);
+  }, [temperature]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { API_KEY_SETTING, PLEASE_SET_API_KEY, SAVE } = useI18n();
+  const { API_KEY_SETTING, PLEASE_SET_API_KEY, SAVE, PRECISE, CREATIVE, TEMPERATURE, BALANCE } = useI18n();
 
   const handleClosePopover = () => {
     setIsOpen(false);
@@ -89,6 +98,27 @@ export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boole
           <SelectItem value="o1">GPT-o1</SelectItem>
         </SelectContent>
       </Select>
+      <div className="space-y-4 !mt-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium">{TEMPERATURE}</span>
+          <motion.span
+            key={temperature}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-xs tabular-nums"
+          >
+            {temperature}
+          </motion.span>
+        </div>
+        <div className="relative !mt-2">
+          <Slider value={[temperature]} onValueChange={([value]) => setTemperature(value)} max={2} min={0} step={0.1} />
+          <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+            <span>{PRECISE}</span>
+            <span>{BALANCE}</span>
+            <span>{CREATIVE}</span>
+          </div>
+        </div>
+      </div>
       <div className="flex gap-2">
         <Button
           disabled={!apiKey}

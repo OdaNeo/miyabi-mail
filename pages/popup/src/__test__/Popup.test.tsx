@@ -36,6 +36,10 @@ vi.mock('@extension/storage', () => ({
     get: vi.fn(),
     set: vi.fn(),
   },
+  temperatureStorage: {
+    get: vi.fn(),
+    set: vi.fn(),
+  },
 }));
 
 vi.mock('@src/hooks/useI18n', () => ({
