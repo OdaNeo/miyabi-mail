@@ -105,10 +105,11 @@ exports[`Popup Component > should render Popup correctly 1`] = `
       class="flex-grow flex flex-col space-y-2 overflow-hidden"
     >
       <div
-        class="relative flex-grow"
+        class="relative flex-grow group"
       >
         <textarea
-          class="flex min-h-[60px] w-full rounded-md border border-input px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-full resize-none text-xs scrollbar-custom dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500"
+          class="flex min-h-[60px] w-full rounded-md border border-input px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-full resize-none text-xs scrollbar-custom dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500 pr-6"
+          data-testid="input-textarea"
           placeholder="Input placeholder"
         />
       </div>
@@ -229,7 +230,322 @@ exports[`Popup Component > should render Popup correctly 1`] = `
         </button>
         <button
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow py-2 relative overflow-hidden ml-3 h-7 px-3 text-xs bg-emerald-500 hover:bg-emerald-600 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700"
+          data-testid="reply-button"
           disabled=""
+        >
+          <span>
+            Generate
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Popup Component > should show clear button when inputText is not empty 1`] = `
+<div>
+  <div
+    class="w-[500px] h-[400px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+  >
+    <div
+      class="flex justify-between items-center"
+    >
+      <h2
+        class="text-base font-bold text-slate-800 dark:text-slate-100"
+      >
+        雅返信
+      </h2>
+      <div
+        class="flex space-x-1"
+      >
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+          data-state="closed"
+        >
+          <svg
+            class="lucide lucide-globe h-3 w-3"
+            data-testid="globe-icon"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            />
+            <path
+              d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+            />
+            <path
+              d="M2 12h20"
+            />
+          </svg>
+        </button>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+          data-state="closed"
+          data-testid="toggle-dark-mode"
+        >
+          <svg
+            class="lucide lucide-moon h-3 w-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"
+            />
+          </svg>
+        </button>
+        <button
+          aria-controls="radix-:rk:"
+          aria-expanded="false"
+          aria-haspopup="dialog"
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+          data-state="closed"
+          data-testid="setting-icon"
+          type="button"
+        >
+          <svg
+            class="lucide lucide-settings h-3 w-3"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="flex-grow flex flex-col space-y-2 overflow-hidden"
+    >
+      <div
+        class="relative flex-grow group"
+      >
+        <textarea
+          class="flex min-h-[60px] w-full rounded-md border border-input px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-full resize-none text-xs scrollbar-custom dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500 pr-6"
+          data-testid="input-textarea"
+          placeholder="Input placeholder"
+        >
+          test input text
+        </textarea>
+        <div
+          animate="[object Object]"
+          class="absolute top-2 right-2"
+          exit="[object Object]"
+          initial="[object Object]"
+        >
+          <button
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-6 w-6"
+            data-testid="text-clear-icon"
+          >
+            <svg
+              class="lucide lucide-x h-6 w-6"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6 6 18"
+              />
+              <path
+                d="m6 6 12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        >
+          <button
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-6 w-6 text-slate-500 hover:text-slate-900 relative"
+            data-testid="copy-icon-group"
+          >
+            <div
+              animate="[object Object]"
+              class="absolute inset-0 flex items-center justify-center"
+              exit="[object Object]"
+              initial="[object Object]"
+              transition="[object Object]"
+            >
+              <svg
+                class="lucide lucide-copy h-4 w-4"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  width="14"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="flex items-center space-x-2"
+        >
+          <button
+            aria-checked="true"
+            class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input"
+            data-state="checked"
+            data-testid="auto-subject-toggle"
+            id="auto-subject"
+            role="switch"
+            type="button"
+            value="on"
+          >
+            <span
+              class="pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0"
+              data-state="checked"
+            />
+          </button>
+          <label
+            class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs cursor-pointer"
+            for="auto-subject"
+          >
+            Generate subject
+          </label>
+        </div>
+        <div
+          class="flex-1"
+        />
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow py-2 relative overflow-hidden ml-3 h-7 px-3 text-xs bg-slate-200 hover:bg-slate-300 text-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+        >
+          <svg
+            class="lucide lucide-wand-sparkles h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"
+            />
+            <path
+              d="m14 7 3 3"
+            />
+            <path
+              d="M5 6v4"
+            />
+            <path
+              d="M19 14v4"
+            />
+            <path
+              d="M10 2v2"
+            />
+            <path
+              d="M7 8H3"
+            />
+            <path
+              d="M21 16h-4"
+            />
+            <path
+              d="M11 3H9"
+            />
+          </svg>
+          <span>
+            Polish
+          </span>
+        </button>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow py-2 relative overflow-hidden ml-3 h-7 px-3 text-xs bg-slate-200 hover:bg-slate-300 text-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+        >
+          <svg
+            class="lucide lucide-languages h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m5 8 6 6"
+            />
+            <path
+              d="m4 14 6-6 2-3"
+            />
+            <path
+              d="M2 5h12"
+            />
+            <path
+              d="M7 2h1"
+            />
+            <path
+              d="m22 22-5-10-5 10"
+            />
+            <path
+              d="M14 18h6"
+            />
+          </svg>
+          <span>
+            Translation
+          </span>
+        </button>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow py-2 relative overflow-hidden ml-3 h-7 px-3 text-xs bg-emerald-500 hover:bg-emerald-600 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700"
+          data-testid="reply-button"
         >
           <span>
             Generate
@@ -346,10 +662,11 @@ exports[`Popup Component > should toggle autoSubject state when clicking the tog
       class="flex-grow flex flex-col space-y-2 overflow-hidden"
     >
       <div
-        class="relative flex-grow"
+        class="relative flex-grow group"
       >
         <textarea
-          class="flex min-h-[60px] w-full rounded-md border border-input px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-full resize-none text-xs scrollbar-custom dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500"
+          class="flex min-h-[60px] w-full rounded-md border border-input px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-full resize-none text-xs scrollbar-custom dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 bg-white text-slate-900 placeholder-slate-500 pr-6"
+          data-testid="input-textarea"
           placeholder="Input placeholder"
         />
       </div>
@@ -470,6 +787,7 @@ exports[`Popup Component > should toggle autoSubject state when clicking the tog
         </button>
         <button
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow py-2 relative overflow-hidden ml-3 h-7 px-3 text-xs bg-emerald-500 hover:bg-emerald-600 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700"
+          data-testid="reply-button"
           disabled=""
         >
           <span>

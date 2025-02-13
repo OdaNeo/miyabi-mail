@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Popup } from '../Popup';
 import { inputTextStorage } from '@extension/storage';
+import { useOpenAIAction } from '@src/hooks/useOpenAIAction';
 
 const mockStorageValues = new Map([[inputTextStorage, '']]);
 
@@ -71,16 +72,24 @@ vi.mock('@src/store/openStore', () => ({
   }),
 }));
 
+const setIsGenerated = vi.fn();
 vi.mock('@src/store/generatedStore', () => ({
   useGeneratedStore: () => ({
-    setIsGenerated: () => ({}),
+    isGenerated: false,
+    setIsGenerated: setIsGenerated,
   }),
 }));
 
+const setExpandedSection = vi.fn();
 vi.mock('@src/store/expandedSectionStore', () => ({
   useExpandedSectionStore: () => ({
-    setExpandedSection: () => ({}),
+    setExpandedSection: setExpandedSection,
   }),
+}));
+
+const mockRunOpenAIAction = vi.fn();
+vi.mock('@src/hooks/useOpenAIAction', () => ({
+  useOpenAIAction: vi.fn(),
 }));
 
 vi.mock('framer-motion', () => ({
@@ -96,6 +105,8 @@ const mockClipboard = {
 Object.assign(navigator, { clipboard: mockClipboard });
 
 describe('Popup Component', () => {
+  vi.mocked(useOpenAIAction).mockImplementation(() => ['', vi.fn(), mockRunOpenAIAction]);
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -112,7 +123,45 @@ describe('Popup Component', () => {
     expect(container).toMatchSnapshot();
   });
 
-  it('should copy inputText to clipboard when copy button is clicked', async () => {
+  it('should subject changed when input', () => {
+    const { getByTestId } = render(<Popup />);
+    const toggle = getByTestId('auto-subject-toggle');
+    fireEvent.click(toggle);
+    const input = getByTestId('subject-input');
+    fireEvent.input(input, { target: { value: 'test subject input' } });
+    waitFor(() => {
+      expect(input).toHaveTextContent('test subject input');
+    });
+    fireEvent.click(toggle);
+    waitFor(() => {
+      expect(input).toHaveTextContent('');
+    });
+  });
+
+  it('should textarea changed when input', () => {
+    const { getByTestId } = render(<Popup />);
+    const textarea = getByTestId('input-textarea');
+    fireEvent.input(textarea, { target: { value: 'test input text' } });
+    waitFor(() => {
+      expect(textarea).toHaveTextContent('test input text');
+    });
+  });
+
+  it('should set isEmailContent to false when pasting email-like content', () => {
+    const { getByTestId } = render(<Popup />);
+    const textarea = getByTestId('input-textarea');
+    const emailContent = `This is not a email content.`;
+    const pasteEvent = new Event('paste', { bubbles: true }) as any;
+    pasteEvent.clipboardData = {
+      getData: () => emailContent,
+    };
+    fireEvent(textarea, pasteEvent);
+    waitFor(() => {
+      expect(screen.queryByText('Not mail content')).toBeInTheDocument();
+    });
+  });
+
+  it('should copy inputText to clipboard when copy button is clicked', () => {
     mockStorageValues.set(inputTextStorage, 'test input text');
     render(<Popup />);
     const copyButton = screen.getByTestId('copy-icon-group');
@@ -120,10 +169,36 @@ describe('Popup Component', () => {
     expect(mockClipboard.writeText).toHaveBeenCalledWith('test input text');
   });
 
+  it('should show clear button when inputText is not empty', () => {
+    mockStorageValues.set(inputTextStorage, 'test input text');
+    const { container } = render(<Popup />);
+    expect(container).toMatchSnapshot();
+  });
+
+  it('should clean input text when clear button is clicked', () => {
+    mockStorageValues.set(inputTextStorage, 'test input text');
+    render(<Popup />);
+    const clearButton = screen.getByTestId('text-clear-icon');
+    fireEvent.click(clearButton);
+    waitFor(() => {
+      expect(mockStorageValues.get(inputTextStorage)).toBe('');
+      expect(setIsGenerated).toHaveBeenCalledWith(false);
+      expect(setExpandedSection).toHaveBeenCalledWith(null);
+    });
+  });
+
   it('should not show copy button when inputText is empty', () => {
     mockStorageValues.set(inputTextStorage, '');
     render(<Popup />);
     const copyButton = screen.queryByTestId('copy-icon-group');
     expect(copyButton).not.toBeInTheDocument();
+  });
+
+  it('should runOpenAIAction be called when click reply button', () => {
+    mockStorageValues.set(inputTextStorage, 'test input text');
+    render(<Popup />);
+    const replyButton = screen.getByTestId('reply-button');
+    fireEvent.click(replyButton);
+    expect(mockRunOpenAIAction).toHaveBeenCalled();
   });
 });

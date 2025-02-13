@@ -103,7 +103,7 @@ describe('Reply Component', () => {
     expect(mockClipboard.writeText).toHaveBeenCalled();
   });
 
-  it('should copy text to clipboard', async () => {
+  it('should copy text to clipboard', () => {
     useStorageMock
       .mockReturnValueOnce('Reply text') // reply
       .mockReturnValueOnce('Translation text');

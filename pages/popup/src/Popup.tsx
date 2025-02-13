@@ -161,40 +161,45 @@ export const Popup = () => {
       )}
 
       <div className="flex-grow flex flex-col space-y-2 overflow-hidden">
-        <div className="relative flex-grow">
+        <div className="relative flex-grow group">
           <Textarea
             placeholder={INPUT_PLACEHOLDER}
             value={inputText}
             disabled={isLoading}
+            data-testid="input-textarea"
             onChange={handleInputTextChange}
             onPaste={handleOnPaste}
             className="h-full resize-none text-xs scrollbar-custom 
             dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
-            bg-white text-slate-900 placeholder-slate-500"
+            bg-white text-slate-900 placeholder-slate-500 pr-6"
           />
-          <AnimatePresence>
-            {inputText && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="absolute top-2 right-2 flex"
-              >
-                <CopyButton handleCopyText={handleCopyText} />
-                <Button
-                  disabled={isLoading}
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={handleInputTextClear}
+          {inputText && (
+            <>
+              <AnimatePresence>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="absolute top-2 right-2"
                 >
-                  <X className="h-6 w-6" />
-                </Button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <Button
+                    disabled={isLoading}
+                    data-testid="text-clear-icon"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={handleInputTextClear}
+                  >
+                    <X className="h-6 w-6" />
+                  </Button>
+                </motion.div>
+              </AnimatePresence>
+              <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <CopyButton handleCopyText={handleCopyText} />
+              </div>
+            </>
+          )}
         </div>
-
         {!isEmailContent && inputText && (
           <div className="flex items-center text-xs dark:text-amber-400 text-amber-500">
             <AlertTriangle className="h-3 w-3 mr-1" />
@@ -250,6 +255,7 @@ export const Popup = () => {
           </Button>
           <Button
             onClick={handleReply}
+            data-testid="reply-button"
             disabled={isLoading || !inputText?.trim()}
             className="relative overflow-hidden ml-3 h-7 px-3 text-xs
             bg-emerald-500 hover:bg-emerald-600 text-white
