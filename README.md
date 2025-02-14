@@ -1,32 +1,69 @@
-## 页面目录
-经过转译以成为扩展一部分的代码位于 pages 目录中。
+# 雅返信
+开发一款基于 React 的浏览器插件，旨在帮助用户快速回复和润色日语邮件。插件使用 OpenAI 的 ChatGPT API，并提供便捷的用户界面与日语语言处理优化功能。
 
-content - 内容脚本（在 manifest.json 中的 content_scripts）
-content-ui - 在当前页面渲染的 React UI（当你开始使用时可以在页面底部看到） （在 manifest.json 中的 content_scripts）
-content-runtime - 注入的内容脚本；这可以从弹出窗口注入，如标准内容一样
-devtools - 扩展浏览器的开发者工具 （在 manifest.json 中的 devtools_page）
-devtools-panel - 开发者工具面板
-new-tab - 覆盖默认的新标签页 （在 manifest.json 中的 chrome_url_overrides.newtab）
-options - 选项页面 （在 manifest.json 中的 options_page）
-popup - 点击工具栏中的扩展图标时显示的弹出窗口 （在 manifest.json 中的 action.default_popup）
-side-panel - 侧边面板（Chrome 114+ 支持） （在 manifest.json 中的 side_panel.default_path）
+---
 
-## 包（Packages）
-一些共享包：
+## 项目目标
+1. 实现插件的基础功能：调用 ChatGPT API，生成日语邮件回复内容。
+2. 提供文本润色功能。
+3. 提供翻译功能。
+3. 支持明暗界面，和三种语言的界面，和本地数据存储。
 
-dev-utils - 用于 Chrome 扩展开发的实用工具（manifest-parser，logger）
-i18n - 自定义国际化包；提供具备类型安全性和其他验证的 i18n 函数
-hmr - Vite 的自定义 HMR 插件，用于重新加载/刷新、HMR 开发服务器的注入脚本
-shared - 整个项目的共享代码（类型、常量、自定义 hook、组件等）
-storage - 更轻松集成存储的辅助工具，例如本地/会话存储
-tailwind-config - 整个项目的共享 Tailwind 配置
-tsconfig - 整个项目的共享 tsconfig
-ui - 用于将你的 Tailwind 配置与全局配置合并的函数；你可以在这里保存组件
-vite-config - 整个项目的共享 Vite 配置
-zipper - 运行 pnpm zip 将 dist 文件夹打包成 extension-YYYYMMDD-HHmmss.zip，并放入新创建的 dist-zip 目录中
-e2e - 运行 pnpm e2e 对你的压缩扩展在不同浏览器上进行端到端测试
+---
+
+## 技术栈
+- **前端框架**：Vite, React, Biome, pnpm
+- **前端模板**：chrome-extension-boilerplate-react-vite（HMR）
+- **测试框架**：Vitest
+- **状态管理**：Zustand
+- **样式管理**：tailwindcss
+- **API 调用**：Fetch
+- **本地存储**：chrome.storage
+
+---
+
+## 项目功能模块
+
+### 1. 邮件生成与润色
+- **功能描述**：
+  - 用户输入邮件内容或需求。
+  - 调用 ChatGPT API，生成日语邮件回复。
+  - 支持对生成内容的润色与优化（如敬语、句式调整）。
+
+### 2. 本地存储
+- **功能描述**：
+  - 存储用户的邮件历史记录。
+  - 支持加载最近一次的输入和输出内容。
+- **实现方式**：
+  - 使用 chrome.storage。
+
+### 3. 日语语言处理优化
+- **功能描述**：
+  - 使用ChatGPT进行语言润色
+
+### 4. 国际化支持
+- **功能描述**：
+  - 界面语言支持中文、日语、英语。
+- **实现方式**：
+  - 使用json实现国际化。
+
+### 5. 错误监控与日志
+- **功能描述**：
+  - 捕获 API 请求错误。
+  - 捕获插件运行时的异常。
+- **实现方式**：
+  - 集成 Sentry，记录错误日志。
+
+### 6. 发布与部署
+- **功能描述**：
+  - 将插件打包并发布到 Chrome Web Store。
+- **实现方式**：
+  - 使用 Vite 打包。
+  - 配置 GitHub Actions，实现自动化发布。
 
 
 ### TODO
 
 1. e2e测试
+2. 发布
+3. 监控以及用户行为分析
