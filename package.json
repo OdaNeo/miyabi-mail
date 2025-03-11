@@ -1,6 +1,6 @@
 {
   "name": "miyabi-mail",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "",
   "license": "MIT",
   "repository": {
@@ -55,7 +55,9 @@
     "vite": "^6.1.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": ["biome format --write"]
+    "*.{js,jsx,ts,tsx,json}": [
+      "biome format --write"
+    ]
   },
   "packageManager": "pnpm@9.15.1",
   "engines": {

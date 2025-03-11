@@ -1,4 +1,3 @@
-import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@extension/shared';
 import { inputTextStorage, replyStorage, translationStorage } from '@extension/storage';
 import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
