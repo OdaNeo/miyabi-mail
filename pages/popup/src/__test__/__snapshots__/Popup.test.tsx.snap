@@ -3,7 +3,8 @@
 exports[`Popup Component > should render Popup correctly 1`] = `
 <div>
   <div
-    class="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    class="p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    id="popup"
   >
     <div
       class="flex justify-between items-center"
@@ -246,7 +247,8 @@ exports[`Popup Component > should render Popup correctly 1`] = `
 exports[`Popup Component > should show clear button when inputText is not empty 1`] = `
 <div>
   <div
-    class="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    class="p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    id="popup"
   >
     <div
       class="flex justify-between items-center"
@@ -560,7 +562,8 @@ exports[`Popup Component > should show clear button when inputText is not empty 
 exports[`Popup Component > should toggle autoSubject state when clicking the toggle 1`] = `
 <div>
   <div
-    class="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    class="p-2 flex flex-col space-y-2 text-sm transition-colors duration-300  dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
+    id="popup"
   >
     <div
       class="flex justify-between items-center"

@@ -21,6 +21,7 @@ import { useInitial } from './hooks/useInitial';
 import { useI18n } from './hooks/useI18n';
 import { CopyButton } from './components/CopyButton';
 import { useOpenAIAction } from './hooks/useOpenAIAction';
+import './Popup.css';
 
 export const Popup = () => {
   const inputTextFromStorage = useStorage(inputTextStorage);
@@ -147,7 +148,8 @@ export const Popup = () => {
 
   return (
     <div
-      className="w-[400px] h-[500px] p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
+      id="popup"
+      className="p-2 flex flex-col space-y-2 text-sm transition-colors duration-300 
     dark:bg-slate-900 dark:text-slate-100 bg-slate-50 text-slate-900"
     >
       <Header />
