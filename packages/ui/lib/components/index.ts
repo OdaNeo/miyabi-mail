@@ -1,4 +1,4 @@
-export * from './button_temp';
+export * from './button';
 export * from './input';
 export * from './label';
 export * from './textarea';
