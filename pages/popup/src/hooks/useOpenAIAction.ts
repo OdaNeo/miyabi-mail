@@ -1,6 +1,6 @@
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage, apiVersionStorage, temperatureStorage } from '@extension/storage';
-import { useOpenStore } from '@src/store/openStore';
+import { useOpenStore } from '@/store/openStore';
 import OpenAI, { APIConnectionError, APIError, RateLimitError } from 'openai';
 import { useCallback, useState } from 'react';
 

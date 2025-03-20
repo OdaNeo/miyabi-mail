@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Header } from '../components/Header';
+import { Header } from '../feature/Header';
 import { useStorage } from '@extension/shared';
 import { i18nStorage } from '@extension/storage';
 
@@ -20,14 +20,14 @@ vi.mock('@extension/storage', () => ({
 
 const setIsOpenMock = vi.fn();
 
-vi.mock('@src/store/openStore', () => ({
+vi.mock('@/store/openStore', () => ({
   useOpenStore: () => ({
     isOpen: false,
     setIsOpen: setIsOpenMock,
   }),
 }));
 
-vi.mock('@src/hooks/useI18n', () => ({
+vi.mock('@/hooks/useI18n', () => ({
   useI18n: () => ({
     CHANGE_TO_LIGHT: 'Change to Light',
     CHANGE_TO_DARK: 'Change to Dark',

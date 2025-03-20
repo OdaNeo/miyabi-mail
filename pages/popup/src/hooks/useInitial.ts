@@ -1,7 +1,7 @@
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage, darkModeStorage, inputTextStorage, replyStorage, translationStorage } from '@extension/storage';
-import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
-import { useGeneratedStore } from '@src/store/generatedStore';
+import { useExpandedSectionStore } from '@/store/expandedSectionStore';
+import { useGeneratedStore } from '@/store/generatedStore';
 import { useEffect } from 'react';
 
 export const useInitial = () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { useExpandedSectionStore } from './expandedSectionStore';
-import type { PROMPT_KEYS } from '@src/utils/tts';
+import type { PROMPT_KEYS } from '@/utils/tts';
 
 describe('useExpandedSectionStore', () => {
   test('默认 expandedSection 应该为 null', () => {

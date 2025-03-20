@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { SettingPopoverContent } from '../components/SettingPopoverContent';
+import { SettingPopoverContent } from '../feature/SettingPopoverContent';
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage } from '@extension/storage';
 
@@ -27,7 +27,7 @@ vi.mock('@extension/storage', () => ({
   temperatureStorage: { set: vi.fn() },
 }));
 
-vi.mock('@src/hooks/useI18n', () => ({
+vi.mock('@/hooks/useI18n', () => ({
   useI18n: () => ({
     API_KEY_SETTING: 'API Key Setting',
     PLEASE_SET_API_KEY: 'Please set API key',

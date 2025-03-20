@@ -10,7 +10,7 @@ const srcDir = resolve(rootDir, 'src');
 export default withPageConfig({
   resolve: {
     alias: {
-      '@src': srcDir,
+      '@': srcDir,
     },
   },
   publicDir: resolve(rootDir, 'public'),
@@ -31,7 +31,6 @@ export default withPageConfig({
     environment: 'jsdom',
     setupFiles: ['./setup-vitest.ts'],
     coverage: {
-      exclude: ['**/src/components/ui/**'],
       include: ['**/src/**'],
     },
   },

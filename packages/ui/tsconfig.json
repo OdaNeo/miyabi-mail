@@ -5,8 +5,8 @@
     "baseUrl": ".",
     "types": ["chrome"],
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["./lib/*"]
+    },
   },
   "include": ["index.ts", "lib"]
 }

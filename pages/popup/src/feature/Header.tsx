@@ -1,11 +1,18 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@src/components/ui/tooltip';
-import { Button } from '@src/components/ui/button';
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@extension/ui';
 import { Settings, Sun, Moon, Globe } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/popover';
 import { useStorage } from '@extension/shared';
 import { darkModeStorage, i18nStorage } from '@extension/storage';
-import { useOpenStore } from '@src/store/openStore';
-import { useI18n } from '@src/hooks/useI18n';
+import { useOpenStore } from '@/store/openStore';
+import { useI18n } from '@/hooks/useI18n';
 import { SettingPopoverContent } from './SettingPopoverContent';
 
 export function Header() {

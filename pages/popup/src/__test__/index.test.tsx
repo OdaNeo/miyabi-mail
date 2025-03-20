@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-vi.mock('@src/Popup', () => ({
+vi.mock('@/Popup', () => ({
   default: () => <div data-testid="popup">Mock Popup Component</div>,
 }));
 
-vi.mock('@src/index.css', () => ({}));
+vi.mock('@/index.css', () => ({}));
 
 describe('Popup initialization', () => {
   beforeEach(() => {

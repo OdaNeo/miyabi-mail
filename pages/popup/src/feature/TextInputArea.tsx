@@ -1,9 +1,8 @@
-import { Button } from '@src/components/ui/button';
+import { Button, Textarea } from '@extension/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { Textarea } from '@src/components/ui/textarea';
-import { CopyButton } from './CopyButton';
-import { useI18n } from '@src/hooks/useI18n';
+import { CopyButton } from '../components/CopyButton';
+import { useI18n } from '@/hooks/useI18n';
 import type { ChangeEvent, ClipboardEvent } from 'react';
 
 export function TextInputArea({

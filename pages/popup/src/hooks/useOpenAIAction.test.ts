@@ -11,7 +11,7 @@ vi.mock('@extension/shared', () => ({
 const mockedUseStorage = vi.mocked(useStorage);
 
 const setIsOpenMock = vi.fn();
-vi.mock('@src/store/openStore', () => ({
+vi.mock('@/store/openStore', () => ({
   useOpenStore: () => ({
     setIsOpen: setIsOpenMock,
   }),

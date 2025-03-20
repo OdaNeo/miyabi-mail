@@ -1,4 +1,4 @@
-import { LANGUAGES } from '@src/const/language';
+import { LANGUAGES } from '@/const/language';
 import { detectLanguage } from './language';
 
 export const PROMPT_TEMPLATES = {

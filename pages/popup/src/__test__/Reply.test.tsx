@@ -1,8 +1,8 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Reply } from '../components/Reply';
+import { Reply } from '../feature/Reply';
 import { useStorage } from '@extension/shared';
-import type { PROMPT_KEYS } from '@src/utils/tts';
+import type { PROMPT_KEYS } from '@/utils/tts';
 
 vi.mock('framer-motion', () => ({
   motion: {
@@ -19,20 +19,20 @@ const setExpandedSectionMock = vi.fn();
 
 let mockExpandedSection: PROMPT_KEYS | null = null;
 
-vi.mock('@src/store/expandedSectionStore', () => ({
+vi.mock('@/store/expandedSectionStore', () => ({
   useExpandedSectionStore: () => ({
     expandedSection: mockExpandedSection,
     setExpandedSection: setExpandedSectionMock,
   }),
 }));
 
-vi.mock('@src/store/generatedStore', () => ({
+vi.mock('@/store/generatedStore', () => ({
   useGeneratedStore: () => ({
     isGenerated: true,
   }),
 }));
 
-vi.mock('@src/hooks/useI18n', () => ({
+vi.mock('@/hooks/useI18n', () => ({
   useI18n: () => ({
     ORIGINAL_TRANSLATION: 'Original Translation',
     REPLY: 'Reply',

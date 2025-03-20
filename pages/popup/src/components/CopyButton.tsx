@@ -1,4 +1,4 @@
-import { Button } from '@src/components/ui/button';
+import { Button } from '@extension/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Check } from 'lucide-react';
 import { useState } from 'react';

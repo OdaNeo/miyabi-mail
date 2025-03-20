@@ -18,7 +18,7 @@ vi.mock('@extension/storage', () => ({
 
 const setIsGeneratedMock = vi.fn();
 
-vi.mock('@src/store/generatedStore', () => ({
+vi.mock('@/store/generatedStore', () => ({
   useGeneratedStore: () => ({
     setIsGenerated: setIsGeneratedMock,
   }),
@@ -26,7 +26,7 @@ vi.mock('@src/store/generatedStore', () => ({
 
 const setExpandedSectionMock = vi.fn();
 
-vi.mock('@src/store/expandedSectionStore', () => ({
+vi.mock('@/store/expandedSectionStore', () => ({
   useExpandedSectionStore: () => ({
     setExpandedSection: setExpandedSectionMock,
   }),

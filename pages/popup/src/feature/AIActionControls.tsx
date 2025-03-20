@@ -1,18 +1,16 @@
-import { Button } from '@src/components/ui/button';
+import { Button, Progress, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@extension/ui';
 import { Languages, Wand2Icon } from 'lucide-react';
-import { Progress } from './ui/progress';
 import { useI18n } from '../hooks/useI18n';
 import { rolePrompt } from '../utils/tts';
 import { useProgress } from '../hooks/useProgress';
 import { useGeneratedStore } from '../store/generatedStore';
 import { useExpandedSectionStore } from '../store/expandedSectionStore';
 import { languageStorage, replyStorage, translationStorage } from '@extension/storage';
-import { useReplyLoading } from '@src/store/replyLoadingStore';
-import { useTranslationLoading } from '@src/store/translationLoadingStore';
-import { usePolishingLoading } from '@src/store/polishingLoadingStore';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useReplyLoading } from '@/store/replyLoadingStore';
+import { useTranslationLoading } from '@/store/translationLoadingStore';
+import { usePolishingLoading } from '@/store/polishingLoadingStore';
 import { useStorage } from '@extension/shared';
-import { LANGUAGES } from '@src/const/language';
+import { LANGUAGES } from '@/const/language';
 
 export function AIActionControls({
   inputText,

@@ -1,16 +1,14 @@
-import type { PROMPT_KEYS } from '@src/utils/tts';
+import type { PROMPT_KEYS } from '@/utils/tts';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Label } from './ui/label';
+import { Label, Button, cn } from '@extension/ui';
 import { ChevronDown, ChevronUp, ClipboardCopy } from 'lucide-react';
-import { Button } from './ui/button';
-import { cn } from '@src/lib/utils';
 import { useState } from 'react';
-import { MessageBox } from './ui/MessageBox';
+import { MessageBox } from '../components/MessageBox';
 import { replyStorage, translationStorage } from '@extension/storage';
 import { useStorage } from '@extension/shared';
-import { useGeneratedStore } from '@src/store/generatedStore';
-import { useExpandedSectionStore } from '@src/store/expandedSectionStore';
-import { useI18n } from '@src/hooks/useI18n';
+import { useGeneratedStore } from '@/store/generatedStore';
+import { useExpandedSectionStore } from '@/store/expandedSectionStore';
+import { useI18n } from '@/hooks/useI18n';
 
 export function Reply() {
   const reply = useStorage(replyStorage);

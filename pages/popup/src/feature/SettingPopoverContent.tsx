@@ -1,14 +1,11 @@
-import { Button } from '@src/components/ui/button';
-import { Slider } from '@src/components/ui/slider';
+import { Button, Input, Slider, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@extension/ui';
 import { AlertTriangle, EyeOff, Eye, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Input } from '@src/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage, apiVersionStorage, temperatureStorage } from '@extension/storage';
 import type React from 'react';
-import { useI18n } from '@src/hooks/useI18n';
-import { CopyButton } from './CopyButton';
+import { useI18n } from '@/hooks/useI18n';
+import { CopyButton } from '../components/CopyButton';
 import { motion } from 'framer-motion';
 
 export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {

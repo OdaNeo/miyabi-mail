@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Popup } from '../Popup';
 import { inputTextStorage } from '@extension/storage';
-import { useOpenAIAction } from '@src/hooks/useOpenAIAction';
+import { useOpenAIAction } from '@/hooks/useOpenAIAction';
 
 const mockStorageValues = new Map([[inputTextStorage, '']]);
 
@@ -47,7 +47,7 @@ vi.mock('@extension/storage', () => ({
   },
 }));
 
-vi.mock('@src/hooks/useI18n', () => ({
+vi.mock('@/hooks/useI18n', () => ({
   useI18n: () => ({
     INPUT_PLACEHOLDER: 'Input placeholder',
     IS_NOT_MAIL_CONTEST: 'Not mail content',
@@ -62,22 +62,22 @@ vi.mock('@src/hooks/useI18n', () => ({
   }),
 }));
 
-vi.mock('@src/hooks/useInitial', () => ({
+vi.mock('@/hooks/useInitial', () => ({
   useInitial: () => ({}),
 }));
 
-vi.mock('@src/hooks/useProgress', () => ({
+vi.mock('@/hooks/useProgress', () => ({
   useProgress: () => [0, () => ({})],
 }));
 
-vi.mock('@src/store/openStore', () => ({
+vi.mock('@/store/openStore', () => ({
   useOpenStore: () => ({
     setIsOpen: () => ({}),
   }),
 }));
 
 const setIsGenerated = vi.fn();
-vi.mock('@src/store/generatedStore', () => ({
+vi.mock('@/store/generatedStore', () => ({
   useGeneratedStore: () => ({
     isGenerated: false,
     setIsGenerated: setIsGenerated,
@@ -85,14 +85,14 @@ vi.mock('@src/store/generatedStore', () => ({
 }));
 
 const setExpandedSection = vi.fn();
-vi.mock('@src/store/expandedSectionStore', () => ({
+vi.mock('@/store/expandedSectionStore', () => ({
   useExpandedSectionStore: () => ({
     setExpandedSection: setExpandedSection,
   }),
 }));
 
 const mockRunOpenAIAction = vi.fn();
-vi.mock('@src/hooks/useOpenAIAction', () => ({
+vi.mock('@/hooks/useOpenAIAction', () => ({
   useOpenAIAction: vi.fn(),
 }));
 

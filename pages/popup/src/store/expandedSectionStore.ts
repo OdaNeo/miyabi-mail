@@ -1,4 +1,4 @@
-import type { PROMPT_KEYS } from '@src/utils/tts';
+import type { PROMPT_KEYS } from '@/utils/tts';
 import { create } from 'zustand';
 
 type State = {

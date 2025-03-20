@@ -2,23 +2,21 @@ import { withErrorBoundary, withSuspense } from '@extension/shared';
 import { inputTextStorage, replyStorage, translationStorage } from '@extension/storage';
 import { useEffect, useState, type ChangeEvent, type ClipboardEvent } from 'react';
 import { useStorage } from '@extension/shared';
-import { Reply } from '@src/components/Reply';
-import { Header } from '@src/components/Header';
+import { Reply } from '@/feature/Reply';
+import { Header } from '@/feature/Header';
 import { AlertTriangle } from 'lucide-react';
 import { isLikelyEmail } from './utils/email';
-import { Switch } from './components/ui/switch';
-import { Label } from './components/ui/label';
-import { Input } from './components/ui/input';
+import { Input, Label, Switch } from '@extension/ui';
 import { useGeneratedStore } from './store/generatedStore';
 import { useExpandedSectionStore } from './store/expandedSectionStore';
 import { useInitial } from './hooks/useInitial';
 import { useI18n } from './hooks/useI18n';
 import { useOpenAIAction } from './hooks/useOpenAIAction';
-import { AIActionControls } from './components/AIActionControls';
+import { AIActionControls } from './feature/AIActionControls';
 import { useReplyLoading } from './store/replyLoadingStore';
 import { useTranslationLoading } from './store/translationLoadingStore';
 import { usePolishingLoading } from './store/polishingLoadingStore';
-import { TextInputArea } from './components/TextInputArea';
+import { TextInputArea } from './feature/TextInputArea';
 import './Popup.css';
 
 export const Popup = () => {
