@@ -5,20 +5,20 @@ exports[`Header Component > should render correctly 1`] = `
   <div
     class="flex justify-between items-center"
   >
-    <h2
-      class="text-base font-bold text-slate-800 dark:text-slate-100"
+    <h1
+      class="font-bold text-slate-800 dark:text-slate-100 text-xl tracking-widest"
     >
       雅返信
-    </h2>
+    </h1>
     <div
-      class="flex space-x-1"
+      class="flex space-x-3"
     >
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
       >
         <svg
-          class="lucide lucide-globe h-3 w-3"
+          class="lucide lucide-globe h-4 w-4"
           data-testid="globe-icon"
           fill="none"
           height="24"
@@ -44,12 +44,12 @@ exports[`Header Component > should render correctly 1`] = `
         </svg>
       </button>
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
         data-testid="toggle-dark-mode"
       >
         <svg
-          class="lucide lucide-moon h-3 w-3"
+          class="lucide lucide-moon h-4 w-4"
           fill="none"
           height="24"
           stroke="currentColor"
@@ -69,13 +69,13 @@ exports[`Header Component > should render correctly 1`] = `
         aria-controls="radix-:r2:"
         aria-expanded="false"
         aria-haspopup="dialog"
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
         data-testid="setting-icon"
         type="button"
       >
         <svg
-          class="lucide lucide-settings h-3 w-3"
+          class="lucide lucide-settings h-4 w-4"
           fill="none"
           height="24"
           stroke="currentColor"
@@ -106,20 +106,20 @@ exports[`Header Component > should render correctly in dark mode 1`] = `
   <div
     class="flex justify-between items-center"
   >
-    <h2
-      class="text-base font-bold text-slate-800 dark:text-slate-100"
+    <h1
+      class="font-bold text-slate-800 dark:text-slate-100 text-xl tracking-widest"
     >
       雅返信
-    </h2>
+    </h1>
     <div
-      class="flex space-x-1"
+      class="flex space-x-3"
     >
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
       >
         <svg
-          class="lucide lucide-globe h-3 w-3"
+          class="lucide lucide-globe h-4 w-4"
           data-testid="globe-icon"
           fill="none"
           height="24"
@@ -145,12 +145,12 @@ exports[`Header Component > should render correctly in dark mode 1`] = `
         </svg>
       </button>
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
         data-testid="toggle-dark-mode"
       >
         <svg
-          class="lucide lucide-sun h-3 w-3"
+          class="lucide lucide-sun h-4 w-4"
           fill="none"
           height="24"
           stroke="currentColor"
@@ -196,13 +196,13 @@ exports[`Header Component > should render correctly in dark mode 1`] = `
         aria-controls="radix-:r5:"
         aria-expanded="false"
         aria-haspopup="dialog"
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:text-accent-foreground w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
         data-state="closed"
         data-testid="setting-icon"
         type="button"
       >
         <svg
-          class="lucide lucide-settings h-3 w-3"
+          class="lucide lucide-settings h-4 w-4"
           fill="none"
           height="24"
           stroke="currentColor"

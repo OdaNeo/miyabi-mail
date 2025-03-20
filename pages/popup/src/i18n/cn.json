@@ -16,7 +16,7 @@
   "INPUT_SUBJECT": "请输入主题",
   "CHANGE_TO_LIGHT": "切换到亮色模式",
   "CHANGE_TO_DARK": "切换到暗色模式",
-  "API_KEY_SETTING": "设定 OPENAI API 密钥",
+  "API_KEY_SETTING": "OPENAI API 密钥",
   "PLEASE_SET_API_KEY": "请设置 API 密钥",
   "SAVE": "保存",
   "CHANGE_LANGUAGE": "切换语言",

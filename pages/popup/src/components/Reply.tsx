@@ -45,7 +45,7 @@ export function Reply() {
           {(['TRANSLATION', 'REPLY'] as PROMPT_KEYS[]).map(section => (
             <div key={section} className="space-y-1">
               <div
-                className="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex justify-between items-center cursor-pointer h-8 p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 onClick={() => toggleSection(section)}
                 onKeyUp={e => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -55,7 +55,7 @@ export function Reply() {
                 role="button"
                 tabIndex={0}
               >
-                <Label className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                <Label className="font-medium text-slate-700 dark:text-slate-300">
                   {section === 'TRANSLATION' ? ORIGINAL_TRANSLATION : REPLY}
                 </Label>
                 <div className="flex items-center space-x-1">
@@ -69,7 +69,7 @@ export function Reply() {
                         handleCopy();
                       }}
                       className={cn(
-                        'h-6 text-xs transition-colors',
+                        'h-6 text-sm transition-colors',
                         copied
                           ? 'bg-emerald-500 text-white hover:bg-emerald-600'
                           : 'text-slate-600 dark:text-slate-400',

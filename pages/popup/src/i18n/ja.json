@@ -16,7 +16,7 @@
   "INPUT_SUBJECT": "件名を入力してください",
   "CHANGE_TO_LIGHT": "ライトモードに切り替え",
   "CHANGE_TO_DARK": "ダークモードに切り替え",
-  "API_KEY_SETTING": "OPENAI APIキーを設定",
+  "API_KEY_SETTING": "OPENAI APIキー",
   "PLEASE_SET_API_KEY": "APIキーを設定してください",
   "SAVE": "保存",
   "CHANGE_LANGUAGE": "言語を切り替え",

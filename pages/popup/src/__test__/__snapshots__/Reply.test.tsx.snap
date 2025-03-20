@@ -12,12 +12,12 @@ exports[`Reply Component > should render correctly when generated 1`] = `
       class="space-y-1"
     >
       <div
-        class="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        class="flex justify-between items-center cursor-pointer h-8 p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         role="button"
         tabindex="0"
       >
         <label
-          class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs font-medium text-slate-700 dark:text-slate-300"
+          class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-slate-700 dark:text-slate-300"
         >
           Original Translation
         </label>
@@ -43,7 +43,7 @@ exports[`Reply Component > should render correctly when generated 1`] = `
         </div>
       </div>
       <div
-        class="bg-slate-100 dark:bg-slate-800 p-1 rounded h-auto overflow-y-auto text-xs scrollbar-custom text-slate-700 dark:text-slate-300"
+        class="bg-slate-100 dark:bg-slate-800 p-1 rounded h-auto overflow-y-auto text-sm scrollbar-custom text-slate-700 dark:text-slate-300"
       >
         Translation text
       </div>
@@ -52,12 +52,12 @@ exports[`Reply Component > should render correctly when generated 1`] = `
       class="space-y-1"
     >
       <div
-        class="flex justify-between items-center cursor-pointer p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        class="flex justify-between items-center cursor-pointer h-8 p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         role="button"
         tabindex="0"
       >
         <label
-          class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs font-medium text-slate-700 dark:text-slate-300"
+          class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-slate-700 dark:text-slate-300"
         >
           Reply
         </label>
@@ -65,7 +65,7 @@ exports[`Reply Component > should render correctly when generated 1`] = `
           class="flex items-center space-x-1"
         >
           <button
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 h-6 text-xs transition-colors text-slate-600 dark:text-slate-400"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 h-6 text-sm transition-colors text-slate-600 dark:text-slate-400"
             data-testid="copy-button"
           >
             Copy

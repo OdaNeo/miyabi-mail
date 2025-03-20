@@ -1,20 +1,20 @@
-import { detectLanguage, Language } from './language';
+import { LANGUAGES } from '@src/const/language';
+import { detectLanguage } from './language';
 
-export enum PROMPT {
-  POLISHING = '你的任务是润色这段文本，文本内容如下：',
-  TRANSLATION = '你的任务是翻译成简体中文，内容如下：',
-  REPLY = '你的任务是回复这封邮件，邮件内容如下：',
-}
+export const PROMPT_TEMPLATES = {
+  POLISHING: () => '你的任务是润色这段文本，文本内容如下：',
+  TRANSLATION: (language: string) => `你的任务是翻译成${language}，内容如下：`,
+  REPLY: (language: string) => `你的任务是回复用${language}这封邮件，邮件内容如下：`,
+};
 
-export type PROMPT_KEYS = keyof typeof PROMPT;
+export type PROMPT_KEYS = keyof typeof PROMPT_TEMPLATES;
 
-export const rolePrompt = (content: string, prompt: PROMPT_KEYS, main_idea?: string) => {
+export const rolePrompt = (content: string, promptKey: PROMPT_KEYS, targetLanguage?: string, main_idea?: string) => {
   const detectedLanguage = detectLanguage(content) === 'unknown' ? '' : detectLanguage(content);
 
-  let promptText: string = PROMPT[prompt];
-  if (detectedLanguage === Language.CN && prompt === 'TRANSLATION') {
-    promptText = `你的任务是翻译成日语，内容如下：`;
-  }
+  const language = LANGUAGES.find(n => n.value === targetLanguage)?.label || '中文';
+
+  const promptText = PROMPT_TEMPLATES[promptKey](language);
 
   const mainIdeaText = main_idea ? `邮件的主要内容在简体中文中的意思是：\n\n${main_idea}\n\n` : '';
 

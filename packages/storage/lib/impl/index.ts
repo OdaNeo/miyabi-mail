@@ -6,3 +6,4 @@ export * from './apiVersionStorage';
 export * from './translationStorage';
 export * from './i18nStorage';
 export * from './temperatureStorage';
+export * from './languageStorage';

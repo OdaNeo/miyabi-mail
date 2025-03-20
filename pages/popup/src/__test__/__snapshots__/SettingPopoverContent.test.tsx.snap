@@ -6,7 +6,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
     class="space-y-2"
   >
     <h3
-      class="font-medium text-slate-800 dark:text-slate-200"
+      class="font-medium text-slate-800 dark:text-slate-200 text-sm"
     >
       API Key Setting
     </h3>
@@ -125,12 +125,12 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
         class="flex items-center justify-between"
       >
         <span
-          class="text-xs font-medium"
+          class="text-sm font-medium"
         >
           Temperature
         </span>
         <span
-          class="text-xs tabular-nums"
+          class="text-sm tabular-nums font-medium"
           style="opacity: 0; transform: translateY(-10px);"
         >
           0.7
@@ -174,7 +174,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
           </span>
         </span>
         <div
-          class="flex justify-between mt-2 text-xs text-muted-foreground"
+          class="flex justify-between mt-2 text-muted-foreground"
         >
           <span>
             Precise
@@ -247,12 +247,12 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
     class="space-y-2"
   >
     <h3
-      class="font-medium text-slate-800 dark:text-slate-200"
+      class="font-medium text-slate-800 dark:text-slate-200 text-sm"
     >
       API Key Setting
     </h3>
     <div
-      class="text-red-500 flex items-center text-xs"
+      class="text-red-500 flex items-center"
     >
       <svg
         class="lucide lucide-triangle-alert h-3 w-3 mr-1"
@@ -359,12 +359,12 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
         class="flex items-center justify-between"
       >
         <span
-          class="text-xs font-medium"
+          class="text-sm font-medium"
         >
           Temperature
         </span>
         <span
-          class="text-xs tabular-nums"
+          class="text-sm tabular-nums font-medium"
           style="opacity: 0; transform: translateY(-10px);"
         >
           0.7
@@ -408,7 +408,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
           </span>
         </span>
         <div
-          class="flex justify-between mt-2 text-xs text-muted-foreground"
+          class="flex justify-between mt-2 text-muted-foreground"
         >
           <span>
             Precise

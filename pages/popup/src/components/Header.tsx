@@ -30,18 +30,18 @@ export function Header() {
 
   return (
     <div className="flex justify-between items-center">
-      <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">雅返信</h2>
-      <div className="flex space-x-1">
+      <h1 className="font-bold text-slate-800 dark:text-slate-100 text-xl tracking-widest">雅返信</h1>
+      <div className="flex space-x-3">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
                 size="icon"
-                className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                className="w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                 onClick={handleSwitchLanguage}
               >
-                <Globe data-testid="globe-icon" className="h-3 w-3" />
+                <Globe data-testid="globe-icon" className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent className="bg-slate-700 text-slate-100 dark:bg-slate-200 dark:text-slate-800">
@@ -56,10 +56,10 @@ export function Header() {
                 variant="outline"
                 size="icon"
                 data-testid="toggle-dark-mode"
-                className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                className="w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                 onClick={handleToggleDarkMode}
               >
-                {darkMode ? <Sun className="h-3 w-3" /> : <Moon className="h-3 w-3" />}
+                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
             </TooltipTrigger>
             <TooltipContent className="bg-slate-700 text-slate-100 dark:bg-slate-200 dark:text-slate-800">
@@ -74,9 +74,9 @@ export function Header() {
               variant="outline"
               size="icon"
               data-testid="setting-icon"
-              className="w-6 h-6 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+              className="w-7 h-7 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
             >
-              <Settings className="h-3 w-3" />
+              <Settings className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">

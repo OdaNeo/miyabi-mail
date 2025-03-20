@@ -1,81 +1,74 @@
-import { describe, expect, test, vi } from 'vitest';
-import { rolePrompt, PROMPT } from './tts';
-import { Language } from './language';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
+import { rolePrompt, PROMPT_TEMPLATES } from './tts';
+import { detectLanguage } from './language';
 
-vi.mock('./language-detection', () => ({
-  detectLanguage: vi.fn((text: string) => {
-    if (text.includes('Hello')) return Language.EN;
-    if (text.includes('你好')) return Language.CN;
-    if (text.includes('こんにちは')) return Language.JP;
-    return 'unknown';
-  }),
-  Language: {
-    EN: '英语',
-    CN: '简体中文',
-    JP: '日语',
-  },
+vi.mock('./language', () => ({
+  detectLanguage: vi.fn(),
 }));
 
-describe('rolePrompt function', () => {
-  test('should generate correct prompt for English polishing', () => {
-    const result = rolePrompt('Hello, how are you?', 'POLISHING');
-    expect(result).toContain('你是一个英语语言专家');
-    expect(result).toContain(PROMPT.POLISHING);
+describe('rolePrompt', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  test('should generate correct prompt for Chinese translation', () => {
-    const result = rolePrompt('你好，最近怎么样？', 'TRANSLATION');
-    expect(result).toContain('你是一个简体中文语言专家');
-    expect(result).toContain('你的任务是翻译成日语');
-  });
+  it('应该生成润色提示文本', () => {
+    const mockDetectLanguage = detectLanguage as Mock;
+    mockDetectLanguage.mockReturnValue('日语');
 
-  test('should generate correct prompt for Japanese reply', () => {
-    const result = rolePrompt('こんにちは、お元気ですか？', 'REPLY');
+    const content = 'テストコンテンツ';
+    const result = rolePrompt(content, 'POLISHING');
+
     expect(result).toContain('你是一个日语语言专家');
-    expect(result).toContain(PROMPT.REPLY);
+    expect(result).toContain(PROMPT_TEMPLATES.POLISHING());
+    expect(result).toContain(content);
   });
 
-  test('should include main idea when provided', () => {
-    const result = rolePrompt('Hello, how are you?', 'POLISHING', '这是一封问候邮件');
-    expect(result).toContain('邮件的主要内容在简体中文中的意思是：');
-    expect(result).toContain('这是一封问候邮件');
-  });
+  it('应该生成翻译提示文本（带目标语言）', () => {
+    const mockDetectLanguage = detectLanguage as Mock;
+    mockDetectLanguage.mockReturnValue('英语');
 
-  test('should handle unknown language', () => {
-    const result = rolePrompt('12345', 'POLISHING');
-    expect(result).toContain('你是一个语言专家');
-  });
+    const content = 'Test content';
+    const result = rolePrompt(content, 'TRANSLATION', 'ja-JP');
 
-  test('should generate correct prompt for English translation', () => {
-    const result = rolePrompt('Hello, how are you?', 'TRANSLATION');
     expect(result).toContain('你是一个英语语言专家');
-    expect(result).toContain(PROMPT.TRANSLATION);
+    expect(result).toContain('你的任务是翻译成日本語');
+    expect(result).toContain(content);
   });
 
-  test('should generate correct prompt for Chinese polishing', () => {
-    const result = rolePrompt('你好，最近怎么样？', 'POLISHING');
+  it(`应该生成回复带目标语言`, () => {
+    const mockDetectLanguage = detectLanguage as Mock;
+    mockDetectLanguage.mockReturnValue('简体中文');
+
+    const content = 'Test content';
+    const result = rolePrompt(content, 'REPLY', 'fr-FR');
+
     expect(result).toContain('你是一个简体中文语言专家');
-    expect(result).toContain(PROMPT.POLISHING);
+    expect(result).toContain('你的任务是回复用Français这封邮件，邮件内容如下：');
+    expect(result).toContain(content);
   });
 
-  test('should generate correct prompt for Japanese translation', () => {
-    const result = rolePrompt('こんにちは、お元気ですか？', 'TRANSLATION');
-    expect(result).toContain('你是一个日语语言专家');
-    expect(result).toContain(PROMPT.TRANSLATION);
+  it('应该生成回复提示文本（带主要意图）', () => {
+    const mockDetectLanguage = detectLanguage as Mock;
+    mockDetectLanguage.mockReturnValue('简体中文');
+
+    const content = '测试内容';
+    const mainIdea = '这是一封测试邮件';
+    const result = rolePrompt(content, 'REPLY', 'zh-CN', mainIdea);
+
+    expect(result).toContain('你是一个简体中文语言专家');
+    expect(result).toContain(`你的任务是回复用中文这封邮件，邮件内容如下：`);
+    expect(result).toContain(content);
+    expect(result).toContain(mainIdea);
   });
 
-  test('should handle empty string input', () => {
-    const result = rolePrompt('', 'POLISHING');
+  it('当检测到未知语言时应处理正确', () => {
+    const mockDetectLanguage = detectLanguage as Mock;
+    mockDetectLanguage.mockReturnValue('unknown');
+
+    const content = '???';
+    const result = rolePrompt(content, 'POLISHING');
+
     expect(result).toContain('你是一个语言专家');
-    expect(result).toContain(PROMPT.POLISHING);
-  });
-
-  test('should include all necessary parts in the prompt', () => {
-    const result = rolePrompt('Hello, how are you?', 'POLISHING', '这是一封问候邮件');
-    expect(result).toContain('你是一个英语语言专家');
-    expect(result).toContain(PROMPT.POLISHING);
-    expect(result).toContain('Hello, how are you?');
-    expect(result).toContain('这是一封问候邮件');
-    expect(result).toContain('请务必认真，准确地执行任务。不要有多余的话语，不要有任何拼写错误。');
+    expect(result).not.toContain('unknown');
   });
 });

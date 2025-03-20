@@ -16,7 +16,7 @@
   "INPUT_SUBJECT": "Please enter the subject",
   "CHANGE_TO_LIGHT": "Switch to light mode",
   "CHANGE_TO_DARK": "Switch to dark mode",
-  "API_KEY_SETTING": "Set OPENAI API Key",
+  "API_KEY_SETTING": "OPENAI API Key",
   "PLEASE_SET_API_KEY": "Please set the API key",
   "SAVE": "Save",
   "CHANGE_LANGUAGE": "Switch Language",
