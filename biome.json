@@ -116,7 +116,7 @@
         "noNamespace": "error",
         "useAsConstAssertion": "error",
         "useBlockStatements": "off",
-        "useImportType": "error"
+        "useImportType": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "error",

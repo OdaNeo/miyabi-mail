@@ -3,6 +3,7 @@ import { apiKeyStorage, darkModeStorage, inputTextStorage, replyStorage, transla
 import { useExpandedSectionStore } from '@/store/expandedSectionStore';
 import { useGeneratedStore } from '@/store/generatedStore';
 import { useEffect } from 'react';
+import { initDatabase } from '@/db/initDatabase';
 
 export const useInitial = () => {
   const apiKey = useStorage(apiKeyStorage);
@@ -35,5 +36,7 @@ export const useInitial = () => {
         setExpandedSection('REPLY');
       }
     }
+
+    initDatabase();
   }, []);
 };

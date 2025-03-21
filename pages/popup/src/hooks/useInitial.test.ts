@@ -32,6 +32,10 @@ vi.mock('@/store/expandedSectionStore', () => ({
   }),
 }));
 
+vi.mock('@/db/initDatabase', () => ({
+  initDatabase: vi.fn(),
+}));
+
 describe('useInitial Hook', () => {
   const useStorageMock = vi.mocked(useStorage);
   const apiKeyStorageSetMock = vi.mocked(apiKeyStorage.set);
