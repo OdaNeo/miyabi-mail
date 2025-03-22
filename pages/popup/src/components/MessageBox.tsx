@@ -6,9 +6,9 @@ export const MessageBox: React.FC<{ children: React.ReactNode }> = ({ children }
   return (
     <div
       className={twMerge(
-        clsx(
-          'bg-slate-100 dark:bg-slate-800 p-1 rounded h-auto overflow-y-auto text-sm scrollbar-custom text-slate-700 dark:text-slate-300',
-        ),
+        clsx(`h-auto overflow-y-auto text-sm scrollbar-custom
+           dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
+         bg-white text-slate-900 placeholder-slate-500 ${children && `p-3`}`),
       )}
     >
       {children}

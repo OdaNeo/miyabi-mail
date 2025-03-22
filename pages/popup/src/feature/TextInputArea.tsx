@@ -23,7 +23,7 @@ export function TextInputArea({
   const { INPUT_PLACEHOLDER } = useI18n();
 
   return (
-    <div className="relative flex-grow group">
+    <div data-testid="text-input" className="relative flex-grow group">
       <Textarea
         placeholder={INPUT_PLACEHOLDER}
         value={inputText}
@@ -31,9 +31,9 @@ export function TextInputArea({
         data-testid="input-textarea"
         onChange={handleInputTextChange}
         onPaste={handleOnPaste}
-        className="h-full resize-none text-sm scrollbar-custom 
-      dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
-      bg-white text-slate-900 placeholder-slate-500 pr-6"
+        className="h-full resize-none text-sm scrollbar-custom rounded-lg
+        dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 
+        bg-white text-slate-900 placeholder-slate-500 pr-5"
       />
       {inputText && (
         <>
@@ -56,7 +56,7 @@ export function TextInputArea({
               </Button>
             </motion.div>
           </AnimatePresence>
-          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div className="absolute bottom-1 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <CopyButton handleCopyText={handleCopyText} />
           </div>
         </>

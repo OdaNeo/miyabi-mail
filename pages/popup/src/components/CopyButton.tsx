@@ -1,15 +1,16 @@
 import { Button } from '@extension/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 
 export const CopyButton = ({ handleCopyText }: { handleCopyText: () => void }) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = (e: MouseEvent) => {
     if (isCopied) {
       return;
     }
+    e.stopPropagation();
     handleCopyText();
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
@@ -33,7 +34,7 @@ export const CopyButton = ({ handleCopyText }: { handleCopyText: () => void }) =
             transition={{ duration: 0.2 }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <Check className="h-4 w-4 text-green-500" />
+            <Check className="h-4 w-4 text-[#8b5cf6] dark:text-[#a78bfa]" />
           </motion.div>
         ) : (
           <motion.div

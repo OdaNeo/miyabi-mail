@@ -14,7 +14,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
       class="relative"
     >
       <input
-        class="flex h-9 w-full rounded-md border border-input px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pr-20 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer"
+        class="flex h-9 w-full rounded-md border border-input px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pr-20 false bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer"
         placeholder="OpenAI API Key"
         readonly=""
         type="password"
@@ -147,11 +147,11 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
           style="--radix-slider-thumb-transform: translateX(-50%);"
         >
           <span
-            class="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20"
+            class="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20 bg-[#e5e7eb] dark:bg-[#2e3238]"
             data-orientation="horizontal"
           >
             <span
-              class="absolute h-full bg-primary"
+              class="absolute h-full bg-primary bg-[#8b5cf6] dark:bg-[#a78bfa]"
               data-orientation="horizontal"
               style="left: 0%; right: 65%;"
             />
@@ -164,7 +164,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
               aria-valuemax="2"
               aria-valuemin="0"
               aria-valuenow="0.7"
-              class="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              class="block h-4 w-4 rounded-full border border-[#e5e7eb] dark:border-[#2e3238] border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[#8b5cf6]"
               data-orientation="horizontal"
               data-radix-collection-item=""
               role="slider"
@@ -192,13 +192,13 @@ exports[`SettingPopoverContent Component > 应该正确渲染有 API key 的状�
       class="flex gap-2"
     >
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 flex-1 text-white disabled:bg-slate-300 dark:disabled:bg-slate-700 bg-[#8b5cf6] hover:bg-[#7c3aed] dark:bg-[#a78bfa] dark:hover:bg-[#9061f9]"
         data-testid="save-icon"
       >
         Save
       </button>
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 w-9"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border bg-background shadow-sm h-9 w-9 border-[#f87171] dark:border-[#ef4444] text-[#ef4444] dark:text-[#f87171] hover:bg-[#fee2e2] dark:hover:bg-[#450a0a]/20 hover:text-[#dc2626] dark:hover:text-[#ef4444]"
         data-testid="delete-api-icon"
       >
         <svg
@@ -282,7 +282,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
       class="relative"
     >
       <input
-        class="flex h-9 w-full rounded-md border border-input px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pr-20 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer"
+        class="flex h-9 w-full rounded-md border border-input px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pr-10 false bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer"
         placeholder="OpenAI API Key"
         readonly=""
         type="password"
@@ -381,11 +381,11 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
           style="--radix-slider-thumb-transform: translateX(-50%);"
         >
           <span
-            class="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20"
+            class="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20 bg-[#e5e7eb] dark:bg-[#2e3238]"
             data-orientation="horizontal"
           >
             <span
-              class="absolute h-full bg-primary"
+              class="absolute h-full bg-primary bg-[#8b5cf6] dark:bg-[#a78bfa]"
               data-orientation="horizontal"
               style="left: 0%; right: 65%;"
             />
@@ -398,7 +398,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
               aria-valuemax="2"
               aria-valuemin="0"
               aria-valuenow="0.7"
-              class="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              class="block h-4 w-4 rounded-full border border-[#e5e7eb] dark:border-[#2e3238] border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[#8b5cf6]"
               data-orientation="horizontal"
               data-radix-collection-item=""
               role="slider"
@@ -426,7 +426,7 @@ exports[`SettingPopoverContent Component > 应该正确渲染没有 API key 的�
       class="flex gap-2"
     >
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 flex-1 text-white disabled:bg-slate-300 dark:disabled:bg-slate-700 bg-[#8b5cf6] hover:bg-[#7c3aed] dark:bg-[#a78bfa] dark:hover:bg-[#9061f9]"
         data-testid="save-icon"
         disabled=""
       >

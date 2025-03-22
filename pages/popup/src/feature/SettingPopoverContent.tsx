@@ -76,7 +76,7 @@ export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boole
           readOnly
           onPaste={handlePaste}
           onClick={handleInputClick}
-          className={`pr-20 ${pasted ? 'border-2 ring-green-500/90 border-green-500/90' : ''} 
+          className={`${apiKey ? 'pr-20' : 'pr-10'}  ${pasted && 'border-2 border-[#8b5cf6] focus-visible:ring-0'} 
             bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 cursor-pointer`}
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -128,13 +128,20 @@ export const SettingPopoverContent = ({ setIsOpen }: { setIsOpen: (isOpen: boole
         <Button
           disabled={!apiKey}
           data-testid="save-icon"
-          className="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700"
+          className="flex-1  text-white disabled:bg-slate-300 dark:disabled:bg-slate-700 
+          bg-[#8b5cf6] hover:bg-[#7c3aed] dark:bg-[#a78bfa] dark:hover:bg-[#9061f9]"
           onClick={handleClosePopover}
         >
           {SAVE}
         </Button>
         {apiKey && (
-          <Button data-testid="delete-api-icon" variant="destructive" size="icon" onClick={handleDelete}>
+          <Button
+            data-testid="delete-api-icon"
+            variant="outline"
+            size="icon"
+            className="border-[#f87171] dark:border-[#ef4444] text-[#ef4444] dark:text-[#f87171] hover:bg-[#fee2e2] dark:hover:bg-[#450a0a]/20 hover:text-[#dc2626] dark:hover:text-[#ef4444]"
+            onClick={handleDelete}
+          >
             <Trash2 className="h-4 w-4" />
           </Button>
         )}

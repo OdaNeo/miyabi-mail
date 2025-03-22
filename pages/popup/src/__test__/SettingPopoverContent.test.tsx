@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SettingPopoverContent } from '../feature/SettingPopoverContent';
 import { useStorage } from '@extension/shared';
@@ -101,12 +101,13 @@ describe('SettingPopoverContent Component', () => {
     expect(apiKeyStorageMock.set).toHaveBeenCalledWith('');
   });
 
-  it('应该在粘贴时正确设置 API key', () => {
+  it('应该在粘贴时正确设置 API key，并且UI要有变化', async () => {
+    vi.useFakeTimers();
     useStorageMock
       .mockReturnValueOnce('gpt-4o') // apiVersion
       .mockReturnValueOnce('') // apiKey
       .mockReturnValueOnce(0.7); // temperatureStorage;
-    const { getByPlaceholderText } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
+    const { getByPlaceholderText, container } = render(<SettingPopoverContent setIsOpen={mockSetIsOpen} />);
     const input = getByPlaceholderText('OpenAI API Key');
     fireEvent.paste(input, {
       clipboardData: {
@@ -115,6 +116,15 @@ describe('SettingPopoverContent Component', () => {
     });
     expect(apiKeyStorageMock.set).toHaveBeenCalledTimes(1);
     expect(apiKeyStorageMock.set).toHaveBeenCalledWith('test-pasted-api-key');
+    expect(input).toHaveClass('border-2 border-[#8b5cf6] focus-visible:ring-0');
+
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(container).not.toHaveClass('border-2 border-[#8b5cf6] focus-visible:ring-0');
+
+    vi.useRealTimers();
   });
 
   it('should close popover when close button is clicked', () => {

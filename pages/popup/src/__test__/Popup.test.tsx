@@ -76,6 +76,14 @@ vi.mock('@/store/openStore', () => ({
   }),
 }));
 
+const toggleIsHistoryOpen = vi.fn();
+vi.mock('@/store/historyOpenStore', () => ({
+  useHistoryOpenStore: () => ({
+    isHistoryOpen: false,
+    toggleIsHistoryOpen: toggleIsHistoryOpen,
+  }),
+}));
+
 const setIsGenerated = vi.fn();
 vi.mock('@/store/generatedStore', () => ({
   useGeneratedStore: () => ({

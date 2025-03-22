@@ -3,15 +3,15 @@ import Dexie, { type EntityTable } from 'dexie';
 
 interface TaskHistory {
   id: number;
-  sourceContent: string;
-  targetLanguage: string;
-  taskType: PROMPT_KEYS;
-  modelVersion: string;
-  modelTemperature: number;
-  emailSubject?: string;
-  generatedContent: string;
-  createdAt: Date;
-  completedAt: Date;
+  sourceContent: string; //inputText
+  targetLanguage: string; //language
+  taskType: PROMPT_KEYS; //promptKey
+  modelVersion: string; //apiVersion
+  modelTemperature: number; //temperature
+  emailSubject?: string; //subject
+  generatedContent: string; //translation reply inputText
+  createdAt: Date; //createTime
+  completedAt: Date; //completedTime
   isVisitable: boolean;
 }
 

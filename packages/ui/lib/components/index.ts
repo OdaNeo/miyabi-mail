@@ -8,3 +8,4 @@ export * from './popover';
 export * from './tooltip';
 export * from './progress';
 export * from './slider';
+export * from './scroll-area';

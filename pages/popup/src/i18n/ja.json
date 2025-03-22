@@ -1,17 +1,17 @@
 {
   "INPUT_PLACEHOLDER": "テキストを入力してください：",
-  "ORIGINAL_TRANSLATION": "原文の翻訳：",
+  "ORIGINAL_TRANSLATION": "翻訳：",
   "REPLY": "返信：",
   "COPY": "コピー",
   "COPIED": "コピー済み",
   "PASTE_API_KEY": "APIキーを貼り付け",
   "IS_NOT_MAIL_CONTEST": "これはメールの内容ではない可能性があります。",
   "GENERATE_SUBJECT": "件名を自動生成",
-  "IS_POLISHING": "洗練中...",
-  "POLISH": "文章を洗練",
+  "IS_POLISHING": "洗練中",
+  "POLISH": "洗練",
   "TRANSLATION": "翻訳",
-  "IS_TRANSLATING": "翻訳中...",
-  "IS_GENERATING": "生成中...",
+  "IS_TRANSLATING": "翻訳中",
+  "IS_GENERATING": "生成中",
   "GENERATE": "返信を生成",
   "INPUT_SUBJECT": "件名を入力してください",
   "CHANGE_TO_LIGHT": "ライトモードに切り替え",
@@ -23,5 +23,7 @@
   "PRECISE": "精密",
   "CREATIVE": "高創造性",
   "TEMPERATURE": "創造性レベル",
-  "BALANCE": "バランス"
+  "BALANCE": "バランス",
+  "NO_HISTORY": "一致する履歴が見つかりませんでした。",
+  "HISTORY_IS_HERE": "ここに履歴が表示され、いつでも確認して再利用できます。"
 }

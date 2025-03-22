@@ -1,7 +1,7 @@
 import { historyDb, TaskHistory } from './model';
 
 async function getAllTaskRecords() {
-  return await historyDb.taskRecords.toArray();
+  return await historyDb.taskRecords.filter(item => item.isVisitable).toArray();
 }
 
 async function findTaskRecordById(id: number) {

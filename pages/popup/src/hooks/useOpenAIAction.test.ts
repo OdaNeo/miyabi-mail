@@ -39,6 +39,11 @@ vi.mock('openai', () => {
 });
 
 describe('useOpenAIAction', () => {
+  const onStartMock = vi.fn();
+  const onFinishMock = vi.fn();
+  const onErrorMock = vi.fn();
+  const onSuccessMock = vi.fn();
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -52,9 +57,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -62,11 +64,13 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
 
     expect(onStartMock).toHaveBeenCalled();
     expect(onSuccessMock).toHaveBeenCalledWith('test response');
+    expect(onErrorMock).not.toHaveBeenCalled();
     expect(onFinishMock).toHaveBeenCalled();
   });
 
@@ -79,9 +83,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -89,6 +90,7 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
 
@@ -96,6 +98,7 @@ describe('useOpenAIAction', () => {
     expect(onStartMock).not.toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
     expect(onFinishMock).not.toHaveBeenCalled();
+    expect(onErrorMock).not.toHaveBeenCalled();
   });
 
   it('should do nothing if inputText is empty', async () => {
@@ -107,9 +110,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = '';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -117,12 +117,14 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
 
     expect(onStartMock).not.toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
     expect(onFinishMock).not.toHaveBeenCalled();
+    expect(onErrorMock).not.toHaveBeenCalled();
   });
 
   it('should handle API response with empty content', async () => {
@@ -154,9 +156,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -164,12 +163,14 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
 
     expect(onStartMock).toHaveBeenCalled();
     expect(onSuccessMock).toHaveBeenCalledWith('');
     expect(onFinishMock).toHaveBeenCalled();
+    expect(onErrorMock).not.toHaveBeenCalled();
   });
 
   it('should set errorMsg when APIConnectionError is thrown', async () => {
@@ -193,21 +194,20 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
         prompt: 'test prompt',
         onStart: onStartMock,
         onFinish: onFinishMock,
+        onError: onErrorMock,
         onSuccess: onSuccessMock,
       });
     });
     expect(onStartMock).toHaveBeenCalled();
     expect(onFinishMock).toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
+    expect(onErrorMock).toHaveBeenCalled();
   });
 
   it('should set errorMsg when RateLimitError is thrown', async () => {
@@ -231,9 +231,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -241,11 +238,13 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
     expect(onStartMock).toHaveBeenCalled();
     expect(onFinishMock).toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
+    expect(onErrorMock).toHaveBeenCalled();
   });
 
   it('should set errorMsg when APIError is thrown', async () => {
@@ -269,9 +268,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -279,11 +275,13 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
     expect(onStartMock).toHaveBeenCalled();
     expect(onFinishMock).toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
+    expect(onErrorMock).toHaveBeenCalled();
   });
 
   it('should set errorMsg when an unknown error is thrown', async () => {
@@ -307,9 +305,6 @@ describe('useOpenAIAction', () => {
 
     const inputText = 'some input text';
     const { result } = renderHook(() => useOpenAIAction(inputText));
-    const onStartMock = vi.fn();
-    const onFinishMock = vi.fn();
-    const onSuccessMock = vi.fn();
 
     await act(async () => {
       await result.current[2]({
@@ -317,10 +312,12 @@ describe('useOpenAIAction', () => {
         onStart: onStartMock,
         onFinish: onFinishMock,
         onSuccess: onSuccessMock,
+        onError: onErrorMock,
       });
     });
     expect(onStartMock).toHaveBeenCalled();
     expect(onFinishMock).toHaveBeenCalled();
     expect(onSuccessMock).not.toHaveBeenCalled();
+    expect(onErrorMock).toHaveBeenCalled();
   });
 });

@@ -5,12 +5,20 @@ import { rolePrompt } from '../utils/tts';
 import { useProgress } from '../hooks/useProgress';
 import { useGeneratedStore } from '../store/generatedStore';
 import { useExpandedSectionStore } from '../store/expandedSectionStore';
-import { languageStorage, replyStorage, translationStorage } from '@extension/storage';
+import {
+  apiVersionStorage,
+  languageStorage,
+  replyStorage,
+  temperatureStorage,
+  translationStorage,
+} from '@extension/storage';
 import { useReplyLoading } from '@/store/replyLoadingStore';
 import { useTranslationLoading } from '@/store/translationLoadingStore';
 import { usePolishingLoading } from '@/store/polishingLoadingStore';
 import { useStorage } from '@extension/shared';
 import { LANGUAGES } from '@/const/language';
+import { addTaskRecord } from '@/db/taskRecordsRepository';
+import { TaskHistoryMapper } from '@/db/Dto';
 
 export function AIActionControls({
   inputText,
@@ -51,7 +59,11 @@ export function AIActionControls({
 
   const isLoading = isReplyLoading || isTranslationLoading || isPolishingLoading;
 
+  const apiVersion = useStorage(apiVersionStorage);
+  const temperature = useStorage(temperatureStorage);
+
   const handleReply = () => {
+    const createTime = new Date().toISOString();
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'REPLY', language, subject?.trim()),
       onStart: () => {
@@ -62,11 +74,25 @@ export function AIActionControls({
       },
       onSuccess: content => {
         setIsGenerated(true), replyStorage.set(content), setExpandedSection('REPLY');
+        addTaskRecord(
+          TaskHistoryMapper.toEntity({
+            inputText,
+            language,
+            promptKey: 'REPLY',
+            apiVersion,
+            temperature,
+            subject,
+            result: content,
+            createTime,
+            completedTime: new Date().toISOString(),
+          }),
+        );
       },
     });
   };
 
   const handleTranslation = () => {
+    const createTime = new Date().toISOString();
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'TRANSLATION', language),
       onStart: () => {
@@ -77,11 +103,24 @@ export function AIActionControls({
       },
       onSuccess: content => {
         setIsGenerated(true), translationStorage.set(content), setExpandedSection('TRANSLATION');
+        addTaskRecord(
+          TaskHistoryMapper.toEntity({
+            inputText,
+            language,
+            promptKey: 'TRANSLATION',
+            apiVersion,
+            temperature,
+            result: content,
+            createTime,
+            completedTime: new Date().toISOString(),
+          }),
+        );
       },
     });
   };
 
   const handlePolishing = () => {
+    const createTime = new Date().toISOString();
     runOpenAIAction({
       prompt: rolePrompt(inputText?.trim(), 'POLISHING'),
       onStart: () => {
@@ -92,14 +131,29 @@ export function AIActionControls({
       },
       onSuccess: content => {
         setIsGenerated(false), setInputText(content), setExpandedSection(null);
+        addTaskRecord(
+          TaskHistoryMapper.toEntity({
+            inputText,
+            language,
+            promptKey: 'POLISHING',
+            apiVersion,
+            temperature,
+            result: content,
+            createTime,
+            completedTime: new Date().toISOString(),
+          }),
+        );
       },
     });
   };
 
   return (
-    <div className="flex items-center" onClick={handleOnClick}>
-      <Select value={language} onValueChange={languageStorage.set}>
-        <SelectTrigger className="w-32 h-8 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+    <div
+      className="flex items-center px-5 py-3 border-t border-[#e5e7eb] dark:border-[#2e3238] bg-[#f3f4f6] dark:bg-[#23252b]"
+      onClick={handleOnClick}
+    >
+      <Select disabled={isLoading} value={language} onValueChange={languageStorage.set}>
+        <SelectTrigger className="w-26 h-9 rounded-md border-[#e5e7eb] dark:border-[#2e3238] bg-white dark:bg-[#1f2128]">
           <SelectValue placeholder="选择语言" />
         </SelectTrigger>
         <SelectContent>
@@ -114,32 +168,32 @@ export function AIActionControls({
       <Button
         onClick={handlePolishing}
         disabled={isLoading || !inputText?.trim()}
-        className="relative overflow-hidden ml-2 h-8 px-3 text-ms
-          bg-slate-200 hover:bg-slate-300 text-slate-900
-          dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+        className="relative ml-2 h-9 px-3 text-ms
+          bg-slate-200 dark:bg-slate-700 hover:bg-[#f9fafb] dark:hover:bg-[#2e3238]"
       >
-        <Wand2Icon className="h-4 w-4" />
+        <Wand2Icon className="h-4 w-4 text-[#8b5cf6] dark:text-[#a78bfa] opacity-80" />
         {isPolishingLoading ? <span>{IS_POLISHING}</span> : <span>{POLISH}</span>}
         {isPolishingLoading && (
           <Progress
             value={polishingProgress}
-            className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-400 dark:bg-emerald-500"
+            className="absolute bottom-0 left-0 right-0 h-1 bg-[#e5e7eb] dark:bg-[#2e3238]"
+            indicatorClassName="bg-[#8b5cf6] dark:bg-[#a78bfa]"
           />
         )}
       </Button>
       <Button
         onClick={handleTranslation}
         disabled={isLoading || !inputText?.trim()}
-        className="relative overflow-hidden ml-2 h-8 px-3 text-ms
-          bg-slate-200 hover:bg-slate-300 text-slate-900
-          dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200"
+        className="relative ml-2 h-9 px-3 text-ms
+          bg-slate-200 dark:bg-slate-700 hover:bg-[#f9fafb] dark:hover:bg-[#2e3238]"
       >
-        <Languages className="h-4 w-4" />
+        <Languages className="h-4 w-4 text-[#8b5cf6] dark:text-[#a78bfa] opacity-80" />
         {isTranslationLoading ? <span>{IS_TRANSLATING}</span> : <span>{TRANSLATION}</span>}
         {isTranslationLoading && (
           <Progress
             value={translationProgress}
-            className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-400 dark:bg-emerald-500"
+            className="absolute bottom-0 left-0 right-0 h-1 bg-[#e5e7eb] dark:bg-[#2e3238]"
+            indicatorClassName="bg-[#8b5cf6] dark:bg-[#a78bfa]"
           />
         )}
       </Button>
@@ -147,15 +201,16 @@ export function AIActionControls({
         onClick={handleReply}
         data-testid="reply-button"
         disabled={isLoading || !inputText?.trim()}
-        className="relative overflow-hidden ml-2 h-8 px-3 text-ms
-          bg-emerald-500 hover:bg-emerald-600 text-white
-          dark:bg-emerald-600 dark:hover:bg-emerald-700"
+        className="relative overflow-hidden ml-2 h-9 px-3 text-ms text-white font-normal
+          rounded-md shadow-sm hover:shadow
+          bg-[#8b5cf6] hover:bg-[#7c3aed] dark:bg-[#a78bfa] dark:hover:bg-[#9061f9]"
       >
         {isReplyLoading ? <span>{IS_GENERATING}</span> : <span>{GENERATE}</span>}
         {isReplyLoading && (
           <Progress
             value={replyProgress}
-            className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-300 dark:bg-emerald-400"
+            className="absolute bottom-0 left-0 right-0 h-1 bg-[#8b5cf6] dark:bg-[#a78bfa]"
+            indicatorClassName="bg-[#e5e7eb] dark:bg-[#2e3238]"
           />
         )}
       </Button>

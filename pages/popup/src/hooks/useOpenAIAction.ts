@@ -18,11 +18,13 @@ export const useOpenAIAction = (inputText: string) => {
       prompt,
       onStart,
       onFinish,
+      onError,
       onSuccess,
     }: {
       prompt: string;
       onStart?: () => void;
       onFinish?: () => void;
+      onError?: (error: Error) => void;
       onSuccess?: (content: string) => void;
     }) => {
       if (!apiKey) {
@@ -55,6 +57,7 @@ export const useOpenAIAction = (inputText: string) => {
         } else {
           setErrorMsg('An unknown error occurred:' + e);
         }
+        onError?.(e as Error);
       } finally {
         onFinish?.();
       }

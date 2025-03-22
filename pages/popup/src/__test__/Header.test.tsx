@@ -27,6 +27,14 @@ vi.mock('@/store/openStore', () => ({
   }),
 }));
 
+const mockToggleIsHistoryOpen = vi.fn();
+vi.mock('@/store/historyOpenStore', () => ({
+  useHistoryOpenStore: () => ({
+    isHistoryOpen: false,
+    toggleIsHistoryOpen: mockToggleIsHistoryOpen,
+  }),
+}));
+
 vi.mock('@/hooks/useI18n', () => ({
   useI18n: () => ({
     CHANGE_TO_LIGHT: 'Change to Light',
@@ -77,5 +85,12 @@ describe('Header Component', () => {
     const settingsButton = screen.getByTestId('setting-icon');
     fireEvent.click(settingsButton);
     expect(setIsOpenMock).toHaveBeenCalledWith(true);
+  });
+
+  it('should show history when clicking clock icon', () => {
+    render(<Header />);
+    const clockButton = screen.getByTestId('clock-icon');
+    fireEvent.click(clockButton);
+    expect(vi.mocked(mockToggleIsHistoryOpen)).toHaveBeenCalled();
   });
 });

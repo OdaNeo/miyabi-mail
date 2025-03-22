@@ -97,8 +97,8 @@ describe('Reply Component', () => {
       .mockReturnValueOnce('Reply text') // reply
       .mockReturnValueOnce('Translation text');
     render(<Reply />);
-    const copyButton = screen.getByTestId('copy-button');
-    fireEvent.click(copyButton, { stopPropagation: true });
+    const copyButton = screen.getAllByTestId('copy-icon-group');
+    fireEvent.click(copyButton[1], { stopPropagation: true });
     expect(setExpandedSectionMock).not.toHaveBeenCalled();
     expect(mockClipboard.writeText).toHaveBeenCalled();
   });
@@ -109,17 +109,30 @@ describe('Reply Component', () => {
       .mockReturnValueOnce('Translation text');
     mockExpandedSection = 'REPLY';
     render(<Reply />);
-    const copyButton = screen.getByTestId('copy-button');
-    fireEvent.click(copyButton);
+    const copyButton = screen.getAllByTestId('copy-icon-group');
+    fireEvent.click(copyButton[1]);
     expect(mockClipboard.writeText).toHaveBeenCalledWith('Reply text');
   });
 
-  it('should not show copy button when reply section is not expanded', () => {
+  it('should copy when translation button is clicked', () => {
+    useStorageMock
+      .mockReturnValueOnce('Reply text') // reply
+      .mockReturnValueOnce('Translation text');
+    mockExpandedSection = 'TRANSLATION';
+    render(<Reply />);
+    const copyButton = screen.getAllByTestId('copy-icon-group');
+    fireEvent.click(copyButton[0]);
+    expect(mockClipboard.writeText).toHaveBeenCalledWith('Translation text');
+  });
+
+  it('should toggle sections when clicking icons', () => {
     useStorageMock
       .mockReturnValueOnce('Reply text') // reply
       .mockReturnValueOnce('Translation text');
     mockExpandedSection = 'REPLY';
     render(<Reply />);
-    expect(screen.queryByTestId('copy-button')).toBeInTheDocument();
+    const toggleElement = screen.getByTestId('section-reply');
+    fireEvent.click(toggleElement);
+    expect(setExpandedSectionMock).toHaveBeenCalledWith(null);
   });
 });

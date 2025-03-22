@@ -28,6 +28,8 @@ export enum I18n {
   CREATIVE = 'CREATIVE',
   TEMPERATURE = 'TEMPERATURE',
   BALANCE = 'BALANCE',
+  NO_HISTORY = 'NO_HISTORY',
+  HISTORY_IS_HERE = 'HISTORY_IS_HERE',
 }
 
 export const useI18n = () => {
