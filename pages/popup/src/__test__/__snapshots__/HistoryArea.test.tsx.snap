@@ -4,6 +4,7 @@ exports[`HistoryArea 组件 > 应该在无历史记录时显示空状态 1`] = `
 <div>
   <div
     class="relative overflow-hidden scrollbar-custom p-5"
+    data-testid="history-area"
     dir="ltr"
     style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
   >
@@ -29,6 +30,7 @@ exports[`HistoryArea 组件 > 应该在无历史记录时显示空状态 1`] = `
           >
             <svg
               class="lucide lucide-circle-alert w-10 h-10 mb-3 opacity-50"
+              data-testid="history-alert-circle"
               fill="none"
               height="24"
               stroke="currentColor"

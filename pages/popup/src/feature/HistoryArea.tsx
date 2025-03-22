@@ -23,7 +23,7 @@ export const HistoryArea = () => {
   };
 
   return (
-    <ScrollArea className="scrollbar-custom p-5">
+    <ScrollArea className="scrollbar-custom p-5" data-testid="history-area">
       <div className="space-y-3">
         <AnimatePresence>
           {filteredHistory && filteredHistory.length > 0 ? (
@@ -76,7 +76,7 @@ export const HistoryArea = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-10 text-[#6b7280] dark:text-[#9ca3af]"
             >
-              <AlertCircle className="w-10 h-10 mb-3 opacity-50" />
+              <AlertCircle className="w-10 h-10 mb-3 opacity-50" data-testid="history-alert-circle" />
               <p className="text-sm">{NO_HISTORY}</p>
               <p className="text-sm mt-1 max-w-xs text-center">{HISTORY_IS_HERE}</p>
             </motion.div>

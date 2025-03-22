@@ -98,7 +98,7 @@ export const Popup = () => {
     >
       <Header />
       {isHistoryOpen ? (
-        <HistoryArea data-testid="history-area" />
+        <HistoryArea />
       ) : (
         <>
           <div className="flex-grow flex-1 flex flex-col space-y-2 px-5 pt-5 pb-3 max-h-[calc(100vh-7.5rem)] overflow-y-auto overflow-x-hidden">

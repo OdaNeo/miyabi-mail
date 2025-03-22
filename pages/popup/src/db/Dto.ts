@@ -28,7 +28,7 @@ export class TaskHistoryMapper {
       isVisitable: true,
     };
   }
-  static toViewModel(entity: TaskHistory): TaskHistoryDTO {
+  static toViewModel(entity: Omit<TaskHistory, 'id'>): TaskHistoryDTO {
     return {
       inputText: entity.sourceContent,
       language: entity.targetLanguage,

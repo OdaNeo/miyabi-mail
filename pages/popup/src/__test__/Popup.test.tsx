@@ -77,11 +77,12 @@ vi.mock('@/store/openStore', () => ({
 }));
 
 const toggleIsHistoryOpen = vi.fn();
+const historyOpenStoreMock = {
+  isHistoryOpen: false,
+  toggleIsHistoryOpen,
+};
 vi.mock('@/store/historyOpenStore', () => ({
-  useHistoryOpenStore: () => ({
-    isHistoryOpen: false,
-    toggleIsHistoryOpen: toggleIsHistoryOpen,
-  }),
+  useHistoryOpenStore: () => historyOpenStoreMock,
 }));
 
 const setIsGenerated = vi.fn();
@@ -121,6 +122,7 @@ describe('Popup Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    historyOpenStoreMock.isHistoryOpen = false;
   });
 
   it('should render Popup correctly', () => {
@@ -212,5 +214,11 @@ describe('Popup Component', () => {
     const replyButton = screen.getByTestId('reply-button');
     fireEvent.click(replyButton);
     expect(mockRunOpenAIAction).toHaveBeenCalled();
+  });
+
+  it('should show history when click history button', () => {
+    historyOpenStoreMock.isHistoryOpen = true;
+    render(<Popup />);
+    expect(screen.getByTestId('history-area')).toBeInTheDocument();
   });
 });
