@@ -37,8 +37,8 @@ export class TaskHistoryMapper {
       temperature: entity.modelTemperature,
       subject: entity?.emailSubject || undefined,
       result: entity.generatedContent,
-      createTime: entity.createdAt.toLocaleString(),
-      completedTime: entity.completedAt.toLocaleString(),
+      createTime: entity.createdAt.toLocaleString('ja-JP'),
+      completedTime: entity.completedAt.toLocaleString('ja-JP'),
     };
   }
 }
