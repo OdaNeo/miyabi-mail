@@ -3,6 +3,9 @@
 
 name: Chrome Extension CI/CD with pnpm
 
+env:
+    TZ: 'Asia/Tokyo'
+
 on:
   push:
     branches: [ "main" ]
