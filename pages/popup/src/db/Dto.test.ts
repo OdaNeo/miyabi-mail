@@ -119,8 +119,8 @@ describe('TaskHistoryMapper', () => {
         temperature: entity.modelTemperature,
         subject: entity.emailSubject,
         result: entity.generatedContent,
-        createTime: entity.createdAt.toLocaleString('ja-JP'),
-        completedTime: entity.completedAt.toLocaleString('ja-JP'),
+        createTime: entity.createdAt.toLocaleString(),
+        completedTime: entity.completedAt.toLocaleString(),
       });
     });
 
@@ -136,10 +136,10 @@ describe('TaskHistoryMapper', () => {
       const entity = mockEntities[0];
       const dto = TaskHistoryMapper.toViewModel(entity);
 
-      const expectedDateFormat = entity.createdAt.toLocaleString('ja-JP');
+      const expectedDateFormat = entity.createdAt.toLocaleString();
 
       expect(dto.createTime).toBe(expectedDateFormat);
-      expect(dto.completedTime).toBe(entity.completedAt.toLocaleString('ja-JP'));
+      expect(dto.completedTime).toBe(entity.completedAt.toLocaleString());
     });
 
     it('应该形成完整的转换循环（DTO → 实体 → DTO）', () => {
