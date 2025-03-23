@@ -29,7 +29,7 @@ export default withPageConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./setup-vitest.ts'],
+    setupFiles: ['./setup-vitest.ts','fake-indexeddb/auto'],
     coverage: {
       include: ['**/src/**'],
     },
