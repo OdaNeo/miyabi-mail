@@ -45,7 +45,7 @@ export const HistoryArea = () => {
                   >
                     <div className="flex items-center gap-2 text-[#6b7280] dark:text-[#9ca3af]">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>{item.completedAt.toLocaleString('ja-JP')}</span>
+                      <span>{item.completedAt.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span

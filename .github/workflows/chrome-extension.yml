@@ -5,6 +5,7 @@ name: Chrome Extension CI/CD with pnpm
 
 env:
     TZ: 'Asia/Tokyo'
+    LANG: 'ja_JP.UTF-8'
 
 on:
   push:
