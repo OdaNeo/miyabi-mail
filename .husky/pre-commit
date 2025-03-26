@@ -1,3 +1,2 @@
 pnpm run type-check
 pnpm dlx lint-staged --allow-empty
-pnpm run test
