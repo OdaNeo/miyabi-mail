@@ -6,25 +6,5 @@
   "extensionName": {
     "description": "雅返信",
     "message": "雅返信"
-  },
-  "toggleTheme": {
-    "message": "Toggle theme"
-  },
-  "loading": {
-    "message": "Loading..."
-  },
-  "greeting": {
-    "description": "こんにちは",
-    "message": "Hello, My name is $NAME$",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Oda　Neo"
-      }
-    }
-  },
-  "hello": {
-    "description": "こんにちは",
-    "message": "Hello $1"
   }
 }
