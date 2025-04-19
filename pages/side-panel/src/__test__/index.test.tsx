@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-vi.mock('@/Popup', () => ({
+vi.mock('@/SidePanel', () => ({
   default: () => <div data-testid="popup">Mock Popup Component</div>,
 }));
 

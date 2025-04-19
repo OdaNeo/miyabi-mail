@@ -274,7 +274,7 @@ importers:
         specifier: ^4.19.2
         version: 4.19.2
 
-  pages/popup:
+  pages/side-panel:
     dependencies:
       '@extension/shared':
         specifier: workspace:*
@@ -8100,10 +8100,10 @@ snapshots:
       form-data: 4.0.1
       html-encoding-sniffer: 4.0.0
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.5
+      https-proxy-agent: 7.0.6
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.16
-      parse5: 7.1.2
+      parse5: 7.2.1
       rrweb-cssom: 0.7.1
       saxes: 6.0.0
       symbol-tree: 3.2.4

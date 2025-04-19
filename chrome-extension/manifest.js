@@ -40,14 +40,14 @@ const manifest = {
   version: packageJson.version,
   description: '__MSG_extensionDescription__',
   // host_permissions: ['<all_urls>'],
-  permissions: ['storage'],
+  permissions: ['storage','sidePanel'],
   // options_page: 'options/index.html',
   background: {
     service_worker: 'background.iife.js',
     type: 'module',
   },
   action: {
-    default_popup: 'popup/index.html',
+    default_popup: '',
     default_icon: 'icon-34.png',
   },
   chrome_url_overrides: {
@@ -77,6 +77,9 @@ const manifest = {
       matches: ['*://*/*'],
     },
   ],
+  side_panel: {
+    default_path: 'side-panel/index.html',
+  },
 };
 
 export default manifest;

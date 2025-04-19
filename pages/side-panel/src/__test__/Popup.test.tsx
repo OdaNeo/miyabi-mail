@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Popup } from '../Popup';
+import { Popup } from '../SidePanel';
 import { inputTextStorage } from '@extension/storage';
 import { useOpenAIAction } from '@/hooks/useOpenAIAction';
 

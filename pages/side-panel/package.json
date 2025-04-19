@@ -1,7 +1,7 @@
 {
-  "name": "@extension/popup",
-  "version": "0.2.3",
-  "description": "chrome extension - popup",
+  "name": "@extension/side-panel",
+  "version": "1.1.0",
+  "description": "chrome extension - side-panel",
   "private": true,
   "sideEffects": true,
   "files": [

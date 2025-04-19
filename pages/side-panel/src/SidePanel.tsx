@@ -17,7 +17,7 @@ import { useReplyLoading } from './store/replyLoadingStore';
 import { useTranslationLoading } from './store/translationLoadingStore';
 import { usePolishingLoading } from './store/polishingLoadingStore';
 import { TextInputArea } from './feature/TextInputArea';
-import './Popup.css';
+import './SidePanel.css';
 import { useHistoryOpenStore } from './store/historyOpenStore';
 import { HistoryArea } from './feature/HistoryArea';
 

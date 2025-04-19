@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import '@extension/ui/dist/global.css';
-import Popup from '@/Popup';
+import SidePanel from '@/SidePanel';
 
 export function init() {
   const appContainer = document.querySelector('#app-container');
@@ -9,7 +9,7 @@ export function init() {
   }
   const root = createRoot(appContainer);
 
-  root.render(<Popup />);
+  root.render(<SidePanel />);
 }
 
 init();

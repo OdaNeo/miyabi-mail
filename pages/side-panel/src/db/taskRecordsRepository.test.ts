@@ -5,8 +5,8 @@ import {
   deleteTaskRecordById,
   updateTaskRecordById,
   addTaskRecord,
-} from '../db/taskRecordsRepository';
-import { historyDb, TaskHistory } from '../db/model';
+} from './taskRecordsRepository';
+import { historyDb, TaskHistory } from './model';
 
 vi.mock('../db/model', () => {
   const mockTaskRecords = [

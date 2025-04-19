@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useInitial } from '../hooks/useInitial';
+import { useInitial } from './useInitial';
 import { useStorage } from '@extension/shared';
 import { apiKeyStorage } from '@extension/storage';
 

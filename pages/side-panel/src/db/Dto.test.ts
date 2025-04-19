@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { TaskHistoryMapper, TaskHistoryDTO } from '../db/Dto';
-import { TaskHistory } from '../db/model';
+import { TaskHistoryMapper, TaskHistoryDTO } from './Dto';
+import { TaskHistory } from './model';
 import { PROMPT_KEYS } from '@/utils/tts';
 import { seed } from './seed';
 
