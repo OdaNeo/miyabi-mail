@@ -24,7 +24,7 @@ export const HistoryArea = () => {
 
   return (
     <ScrollArea className="scrollbar-custom p-5" data-testid="history-area">
-      <div className="space-y-3">
+      <div className="space-y-3 max-w-[calc(100vw-42px)]">
         <AnimatePresence>
           {filteredHistory && filteredHistory.length > 0 ? (
             filteredHistory.map(item => (
